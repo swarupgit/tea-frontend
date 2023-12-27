@@ -1,0 +1,22 @@
+.stats {
+    opacity: 0.8;
+}
+
+.cardRow {
+    position: absolute;
+    width: 100%;
+    top: 30vh;
+    padding: 1rem;
+    animation: meals-appear 1s ease-out forwards;
+}
+
+.cardSpace {
+    display: flex;
+    justify-content: space-between;
+}
+
+@media (max-width: 1024px) {
+    .cardRow {
+      top: 10vh;
+    }
+  }
