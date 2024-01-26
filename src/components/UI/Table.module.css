@@ -1,0 +1,15 @@
+.small-button {
+    font: inherit;
+    cursor: pointer;
+    background-color: transparent;
+    border: 1px solid #f54905;
+    padding: 0.1rem 1rem;
+    border-radius: 25px;
+    margin-left: 1rem;
+    background-color: #f54905;
+    color: white;
+  }
+
+.button-options {
+  text-align: right;
+}
