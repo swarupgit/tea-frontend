@@ -30,7 +30,7 @@ const Navigation = (props) => {
                 onClick={props.addStock}
                 className={classes["top-10"]}
               >
-                Generate Bill
+                Generate Invoice
               </Nav.Link>
             )}
             {isUserLoggedIn && userCanManage && (

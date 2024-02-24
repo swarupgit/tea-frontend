@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkreact_complete_guide=self.webpackChunkreact_complete_guide||[]).push([[76],{8076:function(e,a,r){r.r(a),r.d(a,{default:function(){return d}});var t=r(9439),c=r(2791),s=r(4096),n=r(9434),u=r(6211),i=r(184);function d(){var e=(0,n.v9)(u.MW),a=(0,c.useState)([]),r=(0,t.Z)(a,2),d=r[0];r[1];return(0,i.jsx)(c.Fragment,{children:(0,i.jsxs)("div",{className:"card overlay",children:[(0,i.jsx)("div",{className:"card-header",children:"Quotation List"}),(0,i.jsx)(s.Z,{data:d,columns:e,filter:"row"})]})})}}}]);
-//# sourceMappingURL=76.541f0e64.chunk.js.map

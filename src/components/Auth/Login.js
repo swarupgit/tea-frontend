@@ -11,7 +11,7 @@ const Login = (props) => {
   const [enteredMobile, setEnteredMobile] = useState("");
   const [mobileIsValid, setMobileIsValid] = useState();
   const [enteredPassword, setEnteredPassword] = useState("");
-  const [enteredType, setEnteredType] = useState("");
+  const [enteredType, setEnteredType] = useState("stock");
   const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
   const [matchedCredential, setMatchedCredential] = useState(false);
@@ -110,7 +110,7 @@ const Login = (props) => {
     <Fragment>
       <h3 className={classes.heading}>Login</h3>
       <form onSubmit={submitHandler}>
-        <div className={`${classes.control} ${classes["row-direction"]}`}>
+        {/* <div className={`${classes.control} ${classes["row-direction"]}`}>
           <label htmlFor="type">Login For</label>
           <label htmlFor="business" className={classes.cursor}>
             <input
@@ -134,7 +134,7 @@ const Login = (props) => {
             />
             Stock
           </label>
-        </div>
+        </div> */}
         <div
           className={`${classes.control} ${classes["column-direction"]} ${
             mobileIsValid === false ? classes.invalid : ""

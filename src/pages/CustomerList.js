@@ -33,7 +33,7 @@ export default function CustomerList() {
     <Fragment>
       {addQuote && isUserLoggedIn && <NewQuote onClose={hideNewQuoteHandler} />}
       <div className={`card overlay`}>
-        <div className="card-header">
+        <div className="card-header text-white">
           Customer List
           <button
             className="theme-button"

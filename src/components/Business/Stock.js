@@ -11,7 +11,7 @@ const Stock = (props) => {
   const itemCode = useSelector(invNo);
   const [invoiceNoIsValid, setInvoiceNoIsValid] = useState();
   const [validating, setValidating] = useState(false);
-  const [formIsValid, setFormIsValid] = useState(true);
+  const [formIsValid, setFormIsValid] = useState(false);
   const [enteredInvoiceNo, setEnteredInvoiceNo] = useState(itemCode);
   const [enteredType, setEnteredType] = useState("");
   const [enteredVch, setEnteredVch] = useState("");
@@ -31,10 +31,18 @@ const Stock = (props) => {
     setInvoiceNoIsValid(event.target.value.length > 3);
 
     setFormIsValid(
-      event.target.value.length > 3 &&
+      event.target.value.length > 3 && selectedCustomer.length > 0 &&
         enteredPrice.length > 0
     );
   };
+
+  const customerChangeHandler = (e) => {
+    setSelectedCustomer(e.value)
+    setFormIsValid(
+      e.value.length > 0 && enteredInvoiceNo.length > 3 &&
+        enteredPrice.length > 0
+    );
+  }
 
   const typeChangeHandler = (event) => {
     setEnteredType(event.target.value);
@@ -166,7 +174,7 @@ const Stock = (props) => {
             className="w-full md:w-14rem"
             optionLabel="name"
             value={selectedCustomer}
-            onChange={(e) => setSelectedCustomer(e.value)}
+            onChange={customerChangeHandler}
             valueTemplate={selectedCustomerTemplate}
             itemTemplate={customerOptionTemplate}
             options={customers}

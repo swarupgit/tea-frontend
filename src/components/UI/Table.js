@@ -5,10 +5,17 @@ import { Column } from "primereact/column";
 import classes from "./Table.module.css";
 import { Button } from "primereact/button";
 import { Tooltip } from "primereact/tooltip";
+import moment from "moment";
+import { InputText } from "primereact/inputtext";
+import { FilterMatchMode } from 'primereact/api';
 
 export default function Table(props) {
   const [products, setProducts] = useState([]);
+  const [globalFilterValue, setGlobalFilterValue] = useState('');
   const dt = useRef(null);
+  const [filters, setFilters] = useState({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+});
   useEffect(() => {
     setProducts(props.data);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -54,6 +61,13 @@ export default function Table(props) {
       </a>
     );
   };
+  const formattedDate = (rowData, options) => {
+    return (
+      <span>
+        <span className="d-none">{moment(rowData.createdAt).format('YYYYMMDD')}</span>{moment(rowData.createdAt).format('DD/MM/YYYY')}
+      </span>
+    );
+  };
 
   const deleteItem = (data, frozen, index) => {
     console.log(frozen);
@@ -64,6 +78,16 @@ export default function Table(props) {
     props.viewDetails(data, index);
   }
 
+  const onGlobalFilterChange = (e) => {
+    const value = e.target.value;
+    let _filters = { ...filters };
+
+    _filters['global'].value = value;
+
+    setFilters(_filters);
+    setGlobalFilterValue(value);
+};
+
   const header = () => {
     if(!props.buttons || !props.buttons.length) {
       return;
@@ -71,7 +95,7 @@ export default function Table(props) {
     return (
       <div className={`flex justify-content-end gap-2 ${classes['button-options']}`}>
         {props.buttons.map((bValue, bKey) => (
-          <Fragment key={bKey}>
+          <div key={bKey}>
             {bValue.button === "csv" && bValue.option && (
               <Button
                 type="button"
@@ -101,24 +125,44 @@ export default function Table(props) {
                 data-pr-tooltip="PDF"
               />
             )}
-          </Fragment>
+          </div>
         ))}
+        <span className="p-input-icon-left" style={{ marginTop: "10px"}}>
+            <i className="pi pi-search" />
+            <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Keyword Search" />
+        </span>
       </div>
     );
   };
   const columns = props.columns.map((col, i) => {
     if (col.sortable && col.filter) {
-      return (
-        <Column
+      if(col.dateParse) {
+          return (
+            <Column
+              key={col.field}
+              field={col.field}
+              header={col.header}
+              style={{ width: `${col.width}` }}
+              // filter
+              sortable
+              filterPlaceholder={`Search by ${col.header}`}
+              body={formattedDate}
+            />
+          );
+      }
+      else {
+        return (
+          <Column
           key={col.field}
           field={col.field}
           header={col.header}
           style={{ width: `${col.width}` }}
           sortable
-          filter
+          // filter
           filterPlaceholder={`Search by ${col.header}`}
-        />
-      );
+          />
+          );
+        }
     } else if (col.sortable) {
       return (
         <Column
@@ -137,7 +181,7 @@ export default function Table(props) {
             field={col.field}
             header={col.header}
             style={{ width: `${col.width}` }}
-            filter
+            // filter
             filterPlaceholder={`Search by ${col.header}`}
             body={teleNo}
           />
@@ -149,7 +193,7 @@ export default function Table(props) {
             field={col.field}
             header={col.header}
             style={{ width: `${col.width}` }}
-            filter
+            // filter
             filterPlaceholder={`Search by ${col.header}`}
             body={mailSend}
           />
@@ -161,7 +205,7 @@ export default function Table(props) {
             field={col.field}
             header={col.header}
             style={{ width: `${col.width}` }}
-            filter
+            // filter
             filterPlaceholder={`Search by ${col.header}`}
           />
         );
@@ -177,7 +221,7 @@ export default function Table(props) {
           field={col.field}
           header={col.header}
           style={{ width: `${col.width}` }}
-          filter
+          // filter
           filterPlaceholder={`Search by ${col.header}`}
           body={teleNo}
         />
@@ -189,9 +233,21 @@ export default function Table(props) {
           field={col.field}
           header={col.header}
           style={{ width: `${col.width}` }}
-          filter
+          // filter
           filterPlaceholder={`Search by ${col.header}`}
           body={mailSend}
+        />
+      );
+    } else if (col.dateParse) {
+      return (
+        <Column
+          key={col.field}
+          field={col.field}
+          header={col.header}
+          style={{ width: `${col.width}` }}
+          // filter
+          filterPlaceholder={`Search by ${col.header}`}
+          body={formattedDate}
         />
       );
     } else {
@@ -265,7 +321,8 @@ export default function Table(props) {
         rowsPerPageOptions={[5, 10, 25, 50, 100]}
         tableStyle={{ minWidth: "50rem" }}
         sortMode="multiple"
-        filterDisplay={props.filter}
+        // filterDisplay={props.filter}
+        filters={filters}
       >
         {columns.map((col, i) => {
           return col;

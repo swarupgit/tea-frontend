@@ -12,12 +12,13 @@ const initState = {
       width: "15%",
       sortable: true,
       filter: true,
+      dateParse: true
     },
     {
       field: "invoiceNo",
       header: "Invoice No",
       width: "10%",
-      sortable: false,
+      sortable: true,
       filter: true,
     },
     {
@@ -50,13 +51,13 @@ const initState = {
       field: "debitAmount",
       header: "Debit Amount",
       width: "10%",
-      sortable: false,
+      sortable: true,
     },
     {
       field: "creditAmount",
       header: "Credit Amount",
       width: "10%",
-      sortable: false,
+      sortable: true,
     },
     {
       field: "",
@@ -68,6 +69,7 @@ const initState = {
   ],
   orders: [],
   copyOrders: [],
+  billingOrders: [],
   invNo: `ATG${new Date().toLocaleDateString().replaceAll('/', '').replaceAll('-', '')}-1`,
 };
 
@@ -84,9 +86,28 @@ export const fetchOrder = createAsyncThunk(
   "order/all",
   async (payload) => {
     try {
-      console.log("pay", payload);
+      console.log("pay", JSON.stringify(payload));
+      let param = '';
+      if(payload) {
+        if(payload.from) {
+          param += `from=${payload.from}`;
+        }
+        if(payload.to) {
+          param += `&to=${payload.to}`;
+        }
+        if(payload.customer) {
+          param += `&customer=${payload.customer.id}`;
+        }
+      }
+     
+      let res;
+      if(payload) {
+        res = await backend.get(`${fetchUrl}?${param}`)
+      }
+      else {
+        res = await backend.get(fetchUrl);
+      }
 
-      const res = await backend.get(fetchUrl);
       if (res.status !== 200) {
         throw new Error("Something went wrong");
       }
@@ -102,7 +123,11 @@ export const fetchOrder = createAsyncThunk(
 const orderSlice = createSlice({
   name: "order",
   initialState: { ...initState },
-  reducers: {},
+  reducers: {
+    getBillingItems(state, action) {
+      state.billingOrders = [...state.orders].filter(i => i);
+    }
+  },
   extraReducers(builder) {
     builder
       .addCase(fetchOrder.fulfilled, (state, action) => {
@@ -156,6 +181,7 @@ const orderSlice = createSlice({
 export const orderHeaders = (state) => state.order.headers;
 export const allOrders = (state) => state.order.orders;
 export const invNo = (state) => state.order.invNo;
+export const billingOrders = (state) => state.order.billingOrders;
 
 export const orderActions = orderSlice.actions;
 

@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkreact_complete_guide=self.webpackChunkreact_complete_guide||[]).push([[148],{5148:(e,a,c)=>{c.r(a),c.d(a,{default:()=>n});var r=c(2791),s=c(5211),t=c(9434),d=c(260),l=c(184);function n(){const e=(0,t.v9)(d.mR),[a,c]=(0,r.useState)([]);return(0,l.jsx)(r.Fragment,{children:(0,l.jsxs)("div",{className:"card overlay",children:[(0,l.jsx)("div",{className:"card-header",children:"Stock Entry List"}),(0,l.jsx)(s.Z,{data:a,columns:e,filter:"row"})]})})}}}]);
+//# sourceMappingURL=148.cd149e4f.chunk.js.map

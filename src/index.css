@@ -63,6 +63,7 @@ body {
   float: right;
   color: white;
   background-color: #5a1a01;
+  margin-right: 5px;
 }
 
 .theme-button:hover,
@@ -85,4 +86,20 @@ body {
 
 .hidden-overflow {
   overflow: hidden;
+}
+
+.text-white {
+  color: #fff;
+}
+
+.search-body {
+  background-color: #fff;
+  justify-content: flex-start;
+  font-size: 14px;
+  & label {
+    margin-right: 5px;
+  }
+}
+.space-both {
+  padding: 0 1rem;
 }
