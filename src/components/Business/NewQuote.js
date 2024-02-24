@@ -98,11 +98,8 @@ const NewQuote = (props) => {
           await dispatch(fetchCustomer());
           clearForm();
           props.onClose();
-        })
-        .error(() => {
-          console.log('error')
           setValidating(false);
-        });
+        })
     }
   };
 

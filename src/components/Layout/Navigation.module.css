@@ -12,7 +12,7 @@
 }
 
 .navbar {
-  background-color: #8a2b06;
+  background-color: #060338;
 }
 
 .navbar a {
@@ -39,7 +39,7 @@
 
 .navbar button {
   font: inherit;
-  background: #4d1601;
+  background: #1219cb;
   border: 1px solid #4d1601;
   padding: 0.5rem 1.5rem;
   color: white;

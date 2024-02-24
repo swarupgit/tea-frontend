@@ -144,7 +144,7 @@ export default function Order() {
           />
         </div>
         <div className="col-md-3" style={{ float: "left" }}>
-          <button type="button" className="p-button p-button-success p-button-rounded" onClick={filterRecord}>
+          <button type="button" className="p-button p-button-danger p-button-rounded" onClick={filterRecord}>
             Search Record
           </button>
           <i

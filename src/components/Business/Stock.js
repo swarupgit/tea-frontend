@@ -6,6 +6,7 @@ import { addItem, code, fetchItems } from "../../store/items-slice";
 import { Dropdown } from "primereact/dropdown";
 import { allCustomers } from "../../store/quote-slice";
 import { addOrder, fetchOrder, invNo } from "../../store/order-slice";
+import { Calendar } from "primereact/calendar";
 
 const Stock = (props) => {
   const itemCode = useSelector(invNo);
@@ -23,6 +24,7 @@ const Stock = (props) => {
   const [enteredRate, setEnteredRate] = useState("");
   const [selectedCustomer, setSelectedCustomer] = useState();
   const customers = useSelector(allCustomers);
+  const [selectedDate, setSelectedDate] = useState(new Date())
 
   const dispatch = useDispatch();
 
@@ -31,16 +33,16 @@ const Stock = (props) => {
     setInvoiceNoIsValid(event.target.value.length > 3);
 
     setFormIsValid(
-      event.target.value.length > 3 && selectedCustomer.length > 0 &&
-        enteredPrice.length > 0
+      event.target.value.length > 3 && selectedCustomer.id &&
+        enteredPrice > 0
     );
   };
 
   const customerChangeHandler = (e) => {
     setSelectedCustomer(e.value)
     setFormIsValid(
-      e.value.length > 0 && enteredInvoiceNo.length > 3 &&
-        enteredPrice.length > 0
+      e.value.id && enteredInvoiceNo.length > 3 &&
+        enteredPrice > 0
     );
   }
 
@@ -60,8 +62,8 @@ const Stock = (props) => {
     setEnteredPrice(event.target.value);
 
     setFormIsValid(
-      enteredInvoiceNo.length > 3 &&
-        event.target.value.length > 0
+      enteredInvoiceNo.length > 3 && selectedCustomer.id &&
+        event.target.value > 0
     );
   };
 
@@ -71,15 +73,25 @@ const Stock = (props) => {
 
   const netLeafChangeHandler = (event) => {
     setEnteredNetLeaf(event.target.value);
+    setEnteredPrice(0)
     if(enteredRate && event.target.value) {
       setEnteredPrice(parseFloat(enteredRate) * parseFloat(event.target.value))
+      setFormIsValid(
+        enteredInvoiceNo.length > 3 && selectedCustomer.id &&
+        enteredPrice > 0 && event.target.value > 0
+        );
     }
   };
 
   const rateChangeHandler = (event) => {
     setEnteredRate(event.target.value);
+    setEnteredPrice(0)
     if(enteredNetLeaf && event.target.value) {
       setEnteredPrice(parseFloat(enteredNetLeaf) * parseFloat(event.target.value))
+      setFormIsValid(
+        enteredInvoiceNo.length > 3 && selectedCustomer.id &&
+        enteredPrice > 0 && event.target.value > 0
+        );
     }
   };
 
@@ -100,7 +112,8 @@ const Stock = (props) => {
         creditAmount: enteredType.toLowerCase() !== 'payment' ? parseFloat(enteredPrice) : 0,
         debitAmount: enteredType.toLowerCase() === 'payment' ? parseFloat(enteredPrice) : 0,
         note: enteredNote,
-        customerId: selectedCustomer.id
+        customerId: selectedCustomer.id,
+        transactionDate: selectedDate,
       };
 
       await dispatch(addOrder(payload));
@@ -159,6 +172,20 @@ const Stock = (props) => {
     <Fragment>
       <h3 className={classes.heading}>Generate a new bill</h3>
       <form onSubmit={submitHandler}>
+      <div
+          className={`${classes.control}`}
+        >
+          <label htmlFor="date">Date</label>
+          <Calendar
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.value)}
+            dateFormat="yy-mm-dd"
+            placeholder="Select a Date"
+            readOnlyInput
+            showIcon
+            style={{flex:"3.1 1"}}
+          />
+        </div>
         <div className={`${classes.control}`}>
           <label htmlFor="customer">Customer</label>
           {/* <input
@@ -251,7 +278,7 @@ const Stock = (props) => {
         <div
           className={`${classes.control}`}
         >
-          <label htmlFor="qlty">Qlty</label>
+          <label htmlFor="qlty">Qlty (%)</label>
           <input
             type="text"
             id="qlty"

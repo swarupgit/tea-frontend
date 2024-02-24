@@ -7,7 +7,7 @@ const fetchUrl = `${process.env.REACT_APP_BACKEND_URL}/orders`;
 const initState = {
   headers: [
     {
-      field: "createdAt",
+      field: "transactionDate",
       header: "Date",
       width: "15%",
       sortable: true,

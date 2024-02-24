@@ -35,7 +35,7 @@ const Navigation = (props) => {
             )}
             {isUserLoggedIn && userCanManage && (
               <Nav.Link href="/business/orders" className={classes["top-10"]}>
-                Business
+                Sales
               </Nav.Link>
               // <NavDropdown
               //   title="Business"

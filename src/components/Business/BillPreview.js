@@ -7,10 +7,12 @@ import Table from "../UI/Table";
 import { validateEmail } from "customize-string-operations";
 import { addCustomer, fetchCustomer } from "../../store/quote-slice";
 import moment from "moment";
+import { ToWords } from "to-words";
 
 const BillPreview = (props) => {
   const dispatch = useDispatch();
   useEffect(() => {}, []);
+  const toWords = new ToWords();
 
   const printPage = () => {
     var disp_setting = "toolbar=yes,location=no,";
@@ -60,7 +62,11 @@ const BillPreview = (props) => {
       }
       .row {
         padding: 2rem;
-      }`
+      }      
+      .border-right {
+        border-right: 2px solid;
+      }
+`
     );
     docprint.document.write("a{color:#000;text-decoration:none;} </style>");
     docprint.document.write('</head><body onLoad="self.print()"><center>');
@@ -90,9 +96,9 @@ const BillPreview = (props) => {
       <h3 className={classes.heading}>Bill Details</h3>
       <div className={`card ${classes["m-t-1"]}`} id="printable">
         {/* <div className="card-header">Customer Details</div> */}
-        <div className={` ${classes["p-2"]} card-body`}>
+        <div className={` ${classes["p-1"]} card-body`}>
           <div className="row">
-            <div className={`col-6 ${classes["down-space"]}`}>
+            <div className={`col-6 ${classes["down-space"]} ${classes["border-right"]} border-right`}>
               <label className={`${classes["control-label"]}`}>
                 Seller Details
               </label>
@@ -108,6 +114,10 @@ const BillPreview = (props) => {
               <div className="print-value">
                 {process.env.REACT_APP_COMPANY_MOBILE}
               </div>
+              <label className={`${classes["control-label"]}`}>Bill Date</label>
+              <div className="print-value">
+                {moment().format("DD-MM-YYYY hh:mm A")}
+              </div>
             </div>
             <div className={`col-6 ${classes["down-space"]}`}>
               <label className={`${classes["control-label"]}`}>
@@ -117,12 +127,6 @@ const BillPreview = (props) => {
                 <div className="print-value">{props.customer}</div>
               )}
             </div>
-            <div className={`col ${classes["down-space"]}`}>
-              <label className={`${classes["control-label"]}`}>Bill Date</label>
-              <div className="print-value">
-                {moment().format("DD-MM-YYYY hh:mm A")}
-              </div>
-            </div>
           </div>
           <div className={`${classes.bar} bar`}></div>
           <div className={`${classes["bar-after"]} bar-after row`}>
@@ -130,7 +134,6 @@ const BillPreview = (props) => {
               <thead>
                 <tr className={`${classes["table-row"]} table-row`}>
                   <th>DATE</th>
-                  <th>VCH</th>
                   <th>CL NO</th>
                   <th>%</th>
                   <th>QUANTITY</th>
@@ -144,8 +147,7 @@ const BillPreview = (props) => {
                   props.billingData.length &&
                   props.billingData.map((item, ind) => (
                     <tr key={ind} className={`${classes["table-row"]} table-row`}>
-                      <td>{moment(item.createdAt).format("DD/MM/YYYY")}</td>
-                      <td>{item.vchNo}</td>
+                      <td>{moment(item.transactionDate).format("DD/MM/YYYY")}</td>
                       <td>{item.clNo}</td>
                       <td>{item.qlty}</td>
                       <td>{item.netLeafKgs}</td>
@@ -155,14 +157,22 @@ const BillPreview = (props) => {
                     </tr>
                   ))}
                   <tr className={`${classes["table-row"]} table-row`}>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th>Total Amount</th>
-                  <th></th>
-                  <th>{totalAmount}</th>
-                  <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>Total Amount</th>
+                    <th></th>
+                    <th>{totalAmount}</th>
+                    <th></th>
+                  </tr>
+                  <tr>
+                    <th colSpan={2}>Amount in words</th>
+                    <th colSpan={6}>{toWords.convert(totalAmount)}</th>
+                  </tr>
+                  <tr>
+                    <th colSpan={5}></th>
+                    <th colSpan={3}>For .......................</th>
                   </tr>
               </tbody>
             </table>

@@ -18,17 +18,17 @@ const BusinessStatistic = () => {
                 </div>
                 <div className="col-auto">
                   <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
-                    <i className="pi pi-chart-bar" style={{ fontSize: '2.5rem' }}></i>
+                    {/* <i className="pi pi-chart-bar" style={{ fontSize: '2.5rem' }}></i> */}
                   </div>
                 </div>
               </div>
               <p
                 className={`mt-3 mb-0 text-muted text-sm ${classes.cardSpace}`}
               >
-                <span className="text-success mr-2">
+                {/* <span className="text-success mr-2">
                   <i className="fa fa-arrow-up"></i> 3.48%
                 </span>
-                <span className="text-nowrap">Since last month</span>
+                <span className="text-nowrap">Since last month</span> */}
               </p>
             </div>
           </div>
@@ -52,10 +52,10 @@ const BusinessStatistic = () => {
               <p
                 className={`mt-3 mb-0 text-muted text-sm ${classes.cardSpace}`}
               >
-                <span className="text-danger mr-2">
+                {/* <span className="text-danger mr-2">
                   <i className="fas fa-arrow-down"></i> 3.48%
                 </span>
-                <span className="text-nowrap">Since last month</span>
+                <span className="text-nowrap">Since last month</span> */}
               </p>
             </div>
           </div>
@@ -79,10 +79,10 @@ const BusinessStatistic = () => {
               <p
                 className={`mt-3 mb-0 text-muted text-sm ${classes.cardSpace}`}
               >
-                <span className="text-warning mr-2">
+                {/* <span className="text-warning mr-2">
                   <i className="fas fa-arrow-down"></i> 1.10%
                 </span>
-                <span className="text-nowrap">Since yesterday</span>
+                <span className="text-nowrap">Since yesterday</span> */}
               </p>
             </div>
           </div>
@@ -106,10 +106,10 @@ const BusinessStatistic = () => {
               <p
                 className={`mt-3 mb-0 text-muted text-sm ${classes.cardSpace}`}
               >
-                <span className="text-success mr-2">
+                {/* <span className="text-success mr-2">
                   <i className="fas fa-arrow-up"></i> 12%
                 </span>
-                <span className="text-nowrap">Since last month</span>
+                <span className="text-nowrap">Since last month</span> */}
               </p>
             </div>
           </div>

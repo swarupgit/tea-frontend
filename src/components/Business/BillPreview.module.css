@@ -11,6 +11,10 @@
     padding: 2rem;
   }
 
+  .p-1-2 {
+    padding: 0.5rem;
+  }
+
   .text-right {
     text-align: right;
     font-weight: 600;
@@ -204,4 +208,8 @@
 }
 .down-space {
   margin-bottom: 0.5rem;
+}
+
+.border-right {
+  border-right: 2px solid;
 }

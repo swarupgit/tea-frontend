@@ -101,7 +101,7 @@ const PrintPreview = (props) => {
               </div>
               <div className={`col-6 ${classes['down-space']} down-space`}>
                 <label className={`${classes['control-label']}`}>Invoice Date</label>
-                <div className="print-value">{moment(props.previewData.createdAt).format('LLLL')}</div>
+                <div className="print-value">{moment(props.previewData.transactionDate).format('LLLL')}</div>
               </div>
               <div className={`col-6 ${classes['down-space']} down-space`}>
                 <label className={`${classes['control-label']}`}>Type</label>
