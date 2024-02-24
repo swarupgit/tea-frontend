@@ -70,7 +70,7 @@ const initState = {
   orders: [],
   copyOrders: [],
   billingOrders: [],
-  invNo: `ATG${new Date().toLocaleDateString().replaceAll('/', '').replaceAll('-', '')}-1`,
+  invNo: `ATG${Date.now()}-1`,
 };
 
 export const addOrder = createAsyncThunk("order/addUpdate", async (payload) => {
@@ -143,7 +143,7 @@ const orderSlice = createSlice({
           state.orders = items;
           state.copyOrders = items;
           console.log(state.orders);
-          state.invNo = `ATG${new Date().toLocaleDateString().replaceAll('/', '').replaceAll('-', '')}-${++items.length}`
+          state.invNo = `ATG${Date.now()}-${++items.length}`
         }
       })
       .addCase(addOrder.fulfilled, (state, action) => {
