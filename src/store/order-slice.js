@@ -12,7 +12,7 @@ const initState = {
       width: "15%",
       sortable: true,
       filter: true,
-      dateParse: true
+      dateParse: true,
     },
     {
       field: "invoiceNo",

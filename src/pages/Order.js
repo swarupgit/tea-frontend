@@ -2,7 +2,13 @@ import { Fragment } from "react";
 import React, { useState, useEffect } from "react";
 import Table from "../components/UI/Table";
 import { useDispatch, useSelector } from "react-redux";
-import { allOrders, billingOrders, fetchOrder, orderActions, orderHeaders } from "../store/order-slice";
+import {
+  allOrders,
+  billingOrders,
+  fetchOrder,
+  orderActions,
+  orderHeaders,
+} from "../store/order-slice";
 import PrintPreview from "../components/Business/PrintPreview";
 import { Calendar } from "primereact/calendar";
 import { Dropdown } from "primereact/dropdown";
@@ -23,8 +29,7 @@ export default function Order() {
   const customers = useSelector(allCustomers);
   const billingOrderItems = useSelector(billingOrders);
   const [previewBill, setPreviewBill] = useState(false);
-  const [title, setTitle] = useState('');
-
+  const [title, setTitle] = useState("");
 
   const dispatch = useDispatch();
 
@@ -38,13 +43,17 @@ export default function Order() {
     console.log(data);
     setPreview(true);
     setPreviewData(data);
-    document.body.classList.add('hidden-overflow');
+    document.body.classList.add("hidden-overflow");
   };
+
+  const editItem = (data, index) => {
+    console.log(data, index)
+  }
 
   const closePreview = () => {
     setPreview(false);
     setPreviewData({});
-    document.body.classList.remove('hidden-overflow');
+    document.body.classList.remove("hidden-overflow");
   };
 
   const customerChangeHandler = (e) => {
@@ -74,7 +83,7 @@ export default function Order() {
   const resetSearch = async () => {
     setFromDate();
     setToDate();
-    setSelectedCustomer();
+    // setSelectedCustomer();
     setRecordSearched(false);
     await dispatch(fetchOrder());
   };
@@ -87,23 +96,31 @@ export default function Order() {
         customer: selectedCustomer,
       })
     );
-    if(orders.length) {
+    if (orders.length) {
       setRecordSearched(true);
       dispatch(orderActions.getBillingItems());
     }
   };
 
   const creatingBill = () => {
-    document.body.classList.add('hidden-overflow');
+    document.body.classList.add("hidden-overflow");
     setPreviewBill(true);
-    setTitle(selectedCustomer ? `${moment(fromDate).format("YYYY-MM-DD")} - ${moment(toDate).format("YYYY-MM-DD")} | ${selectedCustomer.name}` : `${moment(fromDate).format("YYYY-MM-DD")} - ${moment(toDate).format("YYYY-MM-DD")}`)
+    setTitle(
+      selectedCustomer
+        ? `${moment(fromDate).format("YYYY-MM-DD")} - ${moment(toDate).format(
+            "YYYY-MM-DD"
+          )} | ${selectedCustomer.name}`
+        : `${moment(fromDate).format("YYYY-MM-DD")} - ${moment(toDate).format(
+            "YYYY-MM-DD"
+          )}`
+    );
     resetSearch();
   };
 
   const closePreviewBill = () => {
     setPreviewBill(false);
-    document.body.classList.remove('hidden-overflow');
-  }
+    document.body.classList.remove("hidden-overflow");
+  };
 
   const dateSelect = (
     <div className={`card-body search-body`}>
@@ -144,7 +161,11 @@ export default function Order() {
           />
         </div>
         <div className="col-md-3" style={{ float: "left" }}>
-          <button type="button" className="p-button p-button-danger p-button-rounded" onClick={filterRecord}>
+          <button
+            type="button"
+            className="p-button p-button-danger p-button-rounded"
+            onClick={filterRecord}
+          >
             Search Record
           </button>
           <i
@@ -153,7 +174,11 @@ export default function Order() {
             style={{ fontSize: "2rem", margin: "8px", cursor: "pointer" }}
           ></i>
           {recordSearched && (
-            <button type="button" className="p-button p-button-rounded" onClick={creatingBill}>
+            <button
+              type="button"
+              className="p-button p-button-rounded"
+              onClick={creatingBill}
+            >
               Create Bill
             </button>
           )}
@@ -170,13 +195,28 @@ export default function Order() {
           <PrintPreview onClose={closePreview} previewData={previewData} />
         )}
         {dateSelect}
-        {previewBill && <BillPreview onClose={closePreviewBill} billingData={billingOrderItems} customer={selectedCustomer ?? 'Customer not Selected when bill created'} title={title}/>}
+        {previewBill && (
+          <BillPreview
+            onClose={closePreviewBill}
+            billingData={billingOrderItems}
+            customer={
+              selectedCustomer ?? "Customer not Selected when bill created"
+            }
+            title={title}
+          />
+        )}
         <Table
           data={orders}
           columns={columns}
-          buttons={[{ button: "xlsx", option: true }]}
+          buttons={[
+            { button: "xlsx", option: true },
+            { button: "pdf", option: true },
+          ]}
           filter="row"
           viewDetails={viewDetails}
+          editItem={editItem}
+          show={true}
+          edit={true}
         />
       </div>
     </Fragment>
