@@ -13,11 +13,11 @@ const NewQuote = (props) => {
   const [customerMobileIsValid, setCustomerMobileIsValid] = useState();
   const [customerAddressIsValid, setCustomerAddressIsValid] = useState();
   const [validating, setValidating] = useState(false);
-  const [formIsValid, setFormIsValid] = useState(false);
-  const [enteredCustomerEmail, setEnteredCustomerEmail] = useState("");
-  const [enteredCustomerName, setEnteredCustomerName] = useState("");
-  const [enteredCustomerMobile, setEnteredCustomerMobile] = useState("");
-  const [enteredCustomerAddress, setEnteredCustomerAddress] = useState("");
+  const [formIsValid, setFormIsValid] = useState(props.editingItem.id ? true : false);
+  const [enteredCustomerEmail, setEnteredCustomerEmail] = useState(props.editingItem.id ? props.editingItem.email : "");
+  const [enteredCustomerName, setEnteredCustomerName] = useState(props.editingItem.id ? props.editingItem.name : "");
+  const [enteredCustomerMobile, setEnteredCustomerMobile] = useState(props.editingItem.id ? props.editingItem.mobile : "");
+  const [enteredCustomerAddress, setEnteredCustomerAddress] = useState(props.editingItem.id ? props.editingItem.address : "");
 
   const dispatch = useDispatch();
 
@@ -81,17 +81,18 @@ const NewQuote = (props) => {
   };
 
   // const item = useSelector((state) => findItem(state, {}));
+  
+  const payload = {
+    email: enteredCustomerEmail,
+    name: enteredCustomerName,
+    mobile: enteredCustomerMobile,
+    address: enteredCustomerAddress,
+  };
 
   const submitHandler = async (event) => {
     event.preventDefault();
     setValidating(true);
     if (formIsValid) {
-      const payload = {
-        email: enteredCustomerEmail,
-        name: enteredCustomerName,
-        mobile: enteredCustomerMobile,
-        address: enteredCustomerAddress,
-      };
 
       dispatch(addCustomer(payload))
         .then(async () => {
@@ -103,18 +104,32 @@ const NewQuote = (props) => {
     }
   };
 
+  const updateCustomer = () => {
+    props.updateCustomer({...payload, id: props.editingItem.id});
+  }
+
   const modalAction = (
     <div className={`${classes.actions} ${classes["m-t-1"]}`}>
       <button className={classes.default} type="button" onClick={props.onClose}>
         Close
       </button>
-      {!validating && (
+      {!validating && !props.editingItem && (
         <button
           className={classes.button}
           type="submit"
           disabled={!formIsValid}
         >
           Save
+        </button>
+      )}
+      {!validating && props.editingItem.id && (
+        <button
+          className={classes.button}
+          type="button"
+          disabled={!formIsValid}
+          onClick={updateCustomer}
+        >
+          Update
         </button>
       )}
       {validating && (

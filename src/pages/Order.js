@@ -8,6 +8,7 @@ import {
   fetchOrder,
   orderActions,
   orderHeaders,
+  putOrder,
 } from "../store/order-slice";
 import PrintPreview from "../components/Business/PrintPreview";
 import { Calendar } from "primereact/calendar";
@@ -15,6 +16,8 @@ import { Dropdown } from "primereact/dropdown";
 import { allCustomers } from "../store/quote-slice";
 import moment from "moment";
 import BillPreview from "../components/Business/BillPreview";
+import { isLoggedIn } from "../store/auth-slice";
+import Stock from "../components/Business/Stock";
 
 export default function Order() {
   const columns = useSelector(orderHeaders);
@@ -30,6 +33,9 @@ export default function Order() {
   const billingOrderItems = useSelector(billingOrders);
   const [previewBill, setPreviewBill] = useState(false);
   const [title, setTitle] = useState("");
+  const [addStock, setAddStock] = useState(false);
+  const isUserLoggedIn = useSelector(isLoggedIn);
+  const [editingItem, setEditingItem] = useState({});
 
   const dispatch = useDispatch();
 
@@ -47,8 +53,37 @@ export default function Order() {
   };
 
   const editItem = (data, index) => {
-    console.log(data, index)
+    console.log(data, index);
+    setAddStock(true);
+    setEditingItem(data);
+    document.body.classList.add('hidden-overflow')
+  };
+
+  const hideAddStockHandler = () => {
+    setAddStock(false);
+    document.body.classList.remove('hidden-overflow')
+  };
+
+  const updateOrder = async (updatingItem) => {
+    await dispatch(putOrder(updatingItem));
+    setAddStock(false);
+    document.body.classList.remove('hidden-overflow');
+    dispatch(fetchOrder());
   }
+
+  const totalNetLeaf = orders.reduce((carry, item) => {
+    return item.netLeafKgs ? carry + parseFloat(item.netLeafKgs) : carry + 0;
+  }, 0).toFixed(2);
+  const totalDebitAmount = orders
+    .reduce((carry, item) => {
+      return item.debitAmount > 0 ? carry + parseFloat(item.debitAmount) : carry + 0;
+    }, 0)
+    .toFixed(2);
+  const totalCreditAmount = orders
+    .reduce((carry, item) => {
+      return item.creditAmount > 0 ? carry + parseFloat(item.creditAmount) : carry + 0;
+    }, 0)
+    .toFixed(2);
 
   const closePreview = () => {
     setPreview(false);
@@ -189,8 +224,9 @@ export default function Order() {
 
   return (
     <Fragment>
+      {addStock && isUserLoggedIn && <Stock onClose={hideAddStockHandler} editingItem={editingItem} updateOrder={updateOrder}/>}
       <div className={`card overlay`}>
-        <div className="card-header text-white">Order List</div>
+        <div className="card-header text-white">Sales List</div>
         {preview && (
           <PrintPreview onClose={closePreview} previewData={previewData} />
         )}
@@ -218,6 +254,15 @@ export default function Order() {
           show={true}
           edit={true}
         />
+        <div className="text-white">
+          <table style={{ width: "100%"}}>
+            <tr>
+              <td>Total Net Leaf: {totalNetLeaf}</td>
+              <td>Total Debit Amount: {totalDebitAmount}</td>
+              <td>Total Credit Amount: {totalCreditAmount}</td>
+            </tr>
+          </table>
+        </div>
       </div>
     </Fragment>
   );

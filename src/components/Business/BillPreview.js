@@ -57,8 +57,16 @@ const BillPreview = (props) => {
     docprint.document.write('<style type="text/css">body{ margin:0px;');
     docprint.document.write("font-family:verdana,Arial;color:#000;");
     docprint.document.write(
-      `font-family:Verdana, Geneva, sans-serif; font-size:12px;}.table-row {
-        border-bottom: 1px solid #adacac;
+      `font-family:Verdana, Geneva, sans-serif; font-size:12px;}
+      .table-row {
+          td,th {
+          border: 1px solid #adacac;
+        }
+      }
+      .table-row:nth-last-child(1) {
+        td {
+          border: none;
+        }
       }
       .custom-table tr{
         td, th {
@@ -153,6 +161,9 @@ const BillPreview = (props) => {
       <div className={`card ${classes["m-t-1"]}`} id="printable">
         {/* <div className="card-header">Customer Details</div> */}
         <div className={` ${classes["p-1"]} card-body`}>
+          <div className={`print-value col text-center bar-after down-space ${classes["down-space"]} ${classes["print-value"]}`}>
+            Bill
+          </div>
           <div className="row box">
             <div
               className={`col-6 ${classes["border-right"]} border-right pd-10`}

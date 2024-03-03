@@ -10,21 +10,53 @@ import { Calendar } from "primereact/calendar";
 
 const Stock = (props) => {
   const itemCode = useSelector(invNo);
-  const [invoiceNoIsValid, setInvoiceNoIsValid] = useState();
+  const [invoiceNoIsValid, setInvoiceNoIsValid] = useState(
+    props.editingItem._id ? true : false
+  );
   const [validating, setValidating] = useState(false);
-  const [formIsValid, setFormIsValid] = useState(false);
-  const [enteredInvoiceNo, setEnteredInvoiceNo] = useState(itemCode);
-  const [enteredType, setEnteredType] = useState("");
-  const [enteredVch, setEnteredVch] = useState("");
-  const [enteredCl, setEnteredCl] = useState("");
-  const [enteredQlty, setEnteredQlty] = useState("");
-  const [enteredPrice, setEnteredPrice] = useState("");
-  const [enteredNote, setEnteredNote] = useState("");
-  const [enteredNetLeaf, setEnteredNetLeaf] = useState("");
-  const [enteredRate, setEnteredRate] = useState("");
-  const [selectedCustomer, setSelectedCustomer] = useState();
+  const [formIsValid, setFormIsValid] = useState(
+    props.editingItem._id ? true : false
+  );
+  const [enteredInvoiceNo, setEnteredInvoiceNo] = useState(
+    props.editingItem._id ? props.editingItem.invoiceNo : itemCode
+  );
+  const [enteredType, setEnteredType] = useState(
+    props.editingItem._id ? props.editingItem.type : ""
+  );
+  const [enteredVch, setEnteredVch] = useState(
+    props.editingItem._id ? props.editingItem.vchNo : ""
+  );
+  const [enteredCl, setEnteredCl] = useState(
+    props.editingItem._id ? props.editingItem.clNo : ""
+  );
+  const [enteredQlty, setEnteredQlty] = useState(
+    props.editingItem._id ? props.editingItem.qlty : ""
+  );
+  const [enteredPrice, setEnteredPrice] = useState(
+    props.editingItem._id
+      ? props.editingItem.type === "payment"
+        ? props.editingItem.debitAmount
+        : props.editingItem.creditAmount
+      : ""
+  );
+  const [enteredNote, setEnteredNote] = useState(
+    props.editingItem._id ? props.editingItem.note : ""
+  );
+  const [enteredNetLeaf, setEnteredNetLeaf] = useState(
+    props.editingItem._id ? props.editingItem.netLeafKgs : ""
+  );
+  const [enteredRate, setEnteredRate] = useState(
+    props.editingItem._id ? props.editingItem.rateKg : ""
+  );
   const customers = useSelector(allCustomers);
-  const [selectedDate, setSelectedDate] = useState(new Date())
+  const [selectedCustomer, setSelectedCustomer] = useState(
+    props.editingItem._id
+      ? customers.find((i) => i.id === props.editingItem.customerId._id) || false
+      : false
+  );
+  const [selectedDate, setSelectedDate] = useState(
+    props.editingItem._id ? new Date(props.editingItem.transactionDate) : new Date()
+  );
 
   const dispatch = useDispatch();
 
@@ -33,18 +65,16 @@ const Stock = (props) => {
     setInvoiceNoIsValid(event.target.value.length > 3);
 
     setFormIsValid(
-      event.target.value.length > 3 && selectedCustomer.id &&
-        enteredPrice > 0
+      event.target.value.length > 3 && selectedCustomer.id && enteredPrice > 0
     );
   };
 
   const customerChangeHandler = (e) => {
-    setSelectedCustomer(e.value)
+    setSelectedCustomer(e.value);
     setFormIsValid(
-      e.value.id && enteredInvoiceNo.length > 3 &&
-        enteredPrice > 0
+      e.value.id && enteredInvoiceNo.length > 3 && enteredPrice > 0
     );
-  }
+  };
 
   const typeChangeHandler = (event) => {
     setEnteredType(event.target.value);
@@ -62,7 +92,8 @@ const Stock = (props) => {
     setEnteredPrice(event.target.value);
 
     setFormIsValid(
-      enteredInvoiceNo.length > 3 && selectedCustomer.id &&
+      enteredInvoiceNo.length > 3 &&
+        selectedCustomer.id &&
         event.target.value > 0
     );
   };
@@ -73,54 +104,69 @@ const Stock = (props) => {
 
   const netLeafChangeHandler = (event) => {
     setEnteredNetLeaf(event.target.value);
-    setEnteredPrice(0)
-    if(enteredRate && event.target.value) {
-      setEnteredPrice(parseFloat(enteredRate) * parseFloat(event.target.value))
+    setEnteredPrice(0);
+    if (enteredRate && event.target.value) {
+      setEnteredPrice(parseFloat(enteredRate) * parseFloat(event.target.value));
       setFormIsValid(
-        enteredInvoiceNo.length > 3 && selectedCustomer.id &&
-        enteredPrice > 0 && event.target.value > 0
-        );
+        enteredInvoiceNo.length > 3 &&
+          selectedCustomer.id &&
+          enteredPrice > 0 &&
+          event.target.value > 0
+      );
     }
   };
 
   const rateChangeHandler = (event) => {
     setEnteredRate(event.target.value);
-    setEnteredPrice(0)
-    if(enteredNetLeaf && event.target.value) {
-      setEnteredPrice(parseFloat(enteredNetLeaf) * parseFloat(event.target.value))
+    setEnteredPrice(0);
+    if (enteredNetLeaf && event.target.value) {
+      setEnteredPrice(
+        parseFloat(enteredNetLeaf) * parseFloat(event.target.value)
+      );
       setFormIsValid(
-        enteredInvoiceNo.length > 3 && selectedCustomer.id &&
-        enteredPrice > 0 && event.target.value > 0
-        );
+        enteredInvoiceNo.length > 3 &&
+          selectedCustomer.id &&
+          enteredPrice > 0 &&
+          event.target.value > 0
+      );
     }
   };
 
   // const item = useSelector((state) => findItem(state, {}));
+  const payload = {
+    invoiceNo: enteredInvoiceNo,
+    type: enteredType,
+    vchNo: enteredVch,
+    clNo: enteredCl,
+    netLeafKgs: parseFloat(enteredNetLeaf),
+    rateKg: enteredRate,
+    qlty: enteredQlty,
+    creditAmount:
+      enteredType.toLowerCase() !== "payment"
+        ? parseFloat(enteredPrice)
+        : 0,
+    debitAmount:
+      enteredType.toLowerCase() === "payment"
+        ? parseFloat(enteredPrice)
+        : 0,
+    note: enteredNote,
+    customerId: selectedCustomer.id,
+    transactionDate: selectedDate,
+  };
 
   const submitHandler = async (event) => {
     event.preventDefault();
     setValidating(true);
     if (formIsValid) {
-      const payload = {
-        invoiceNo: enteredInvoiceNo,
-        type: enteredType,
-        vchNo: enteredVch,
-        clNo: enteredCl,
-        netLeafKgs: parseFloat(enteredNetLeaf),
-        rateKg: enteredRate,
-        qlty: enteredQlty,
-        creditAmount: enteredType.toLowerCase() !== 'payment' ? parseFloat(enteredPrice) : 0,
-        debitAmount: enteredType.toLowerCase() === 'payment' ? parseFloat(enteredPrice) : 0,
-        note: enteredNote,
-        customerId: selectedCustomer.id,
-        transactionDate: selectedDate,
-      };
-
       await dispatch(addOrder(payload));
       await dispatch(fetchOrder());
       props.onClose();
     }
   };
+
+  const updateOrder = () => {
+    props.updateOrder({...payload, _id: props.editingItem._id});
+  }
 
   const selectedCustomerTemplate = (option, props) => {
     if (option) {
@@ -151,13 +197,23 @@ const Stock = (props) => {
       >
         Cancel
       </button>
-      {!validating && (
+      {!validating && !props.editingItem && (
         <button
           className={classes.button}
           type="submit"
           disabled={!formIsValid}
         >
           Save
+        </button>
+      )}
+      {!validating && props.editingItem._id && (
+        <button
+          className={classes.button}
+          type="button"
+          disabled={!formIsValid}
+          onClick={updateOrder}
+        >
+          Update
         </button>
       )}
       {validating && (
@@ -172,9 +228,7 @@ const Stock = (props) => {
     <Fragment>
       <h3 className={classes.heading}>Generate a new bill</h3>
       <form onSubmit={submitHandler}>
-      <div
-          className={`${classes.control}`}
-        >
+        <div className={`${classes.control}`}>
           <label htmlFor="date">Date</label>
           <Calendar
             value={selectedDate}
@@ -183,7 +237,7 @@ const Stock = (props) => {
             placeholder="Select a Date"
             readOnlyInput
             showIcon
-            style={{flex:"3.1 1"}}
+            style={{ flex: "3.1 1" }}
           />
         </div>
         <div className={`${classes.control}`}>
@@ -205,7 +259,7 @@ const Stock = (props) => {
             valueTemplate={selectedCustomerTemplate}
             itemTemplate={customerOptionTemplate}
             options={customers}
-            style={{flex:"3.1 1"}}
+            style={{ flex: "3.1 1" }}
           />
         </div>
         <div
@@ -227,9 +281,7 @@ const Stock = (props) => {
             onChange={invoiceNoChangeHandler}
           />
         </div>
-        <div
-          className={`${classes.control}`}
-        >
+        <div className={`${classes.control}`}>
           <label htmlFor="type">Type</label>
           <input
             type="text"
@@ -239,9 +291,7 @@ const Stock = (props) => {
             onChange={typeChangeHandler}
           />
         </div>
-        <div
-          className={`${classes.control}`}
-        >
+        <div className={`${classes.control}`}>
           <label htmlFor="vchNo">VCH No</label>
           <input
             type="text"
@@ -251,9 +301,7 @@ const Stock = (props) => {
             onChange={vchChangeHandler}
           />
         </div>
-        <div
-          className={`${classes.control}`}
-        >
+        <div className={`${classes.control}`}>
           <label htmlFor="clNo">CL No</label>
           <input
             type="text"
@@ -263,9 +311,7 @@ const Stock = (props) => {
             onChange={clChangeHandler}
           />
         </div>
-        <div
-          className={`${classes.control}`}
-        >
+        <div className={`${classes.control}`}>
           <label htmlFor="partNo">Net Leaf Kgs</label>
           <input
             type="text"
@@ -275,9 +321,7 @@ const Stock = (props) => {
             onChange={netLeafChangeHandler}
           />
         </div>
-        <div
-          className={`${classes.control}`}
-        >
+        <div className={`${classes.control}`}>
           <label htmlFor="qlty">Qlty (%)</label>
           <input
             type="text"
@@ -287,9 +331,7 @@ const Stock = (props) => {
             onChange={qltyChangeHandler}
           />
         </div>
-        <div
-          className={`${classes.control}`}
-        >
+        <div className={`${classes.control}`}>
           <label htmlFor="rateKg">Rate/KG</label>
           <input
             type="text"
@@ -299,9 +341,7 @@ const Stock = (props) => {
             onChange={rateChangeHandler}
           />
         </div>
-        <div
-          className={`${classes.control}`}
-        >
+        <div className={`${classes.control}`}>
           <label htmlFor="price">Amount</label>
           <input
             type="text"

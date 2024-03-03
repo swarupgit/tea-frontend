@@ -9,7 +9,7 @@ const initState = {
     {
       field: "transactionDate",
       header: "Date",
-      width: "15%",
+      width: "10%",
       sortable: true,
       filter: true,
       dateParse: true,
@@ -17,6 +17,13 @@ const initState = {
     {
       field: "invoiceNo",
       header: "Invoice No",
+      width: "10%",
+      sortable: true,
+      filter: true,
+    },
+    {
+      field: "customerId.name",
+      header: "Customer Name",
       width: "10%",
       sortable: true,
       filter: true,
@@ -35,17 +42,16 @@ const initState = {
       sortable: false,
     },
     {
-      field: "rateKg",
-      header: "Rate/KG",
+      field: "qlty",
+      header: "Qlty(%)",
       width: "10%",
       sortable: false,
     },
     {
-      field: "customerId.name",
-      header: "Customer Name",
-      width: "13%",
-      sortable: true,
-      filter: true,
+      field: "rateKg",
+      header: "Rate/KG",
+      width: "10%",
+      sortable: false,
     },
     {
       field: "debitAmount",
@@ -62,7 +68,7 @@ const initState = {
     {
       field: "",
       header: "Action",
-      width: "11%",
+      width: "10%",
       sortable: false,
       view: true,
     },
@@ -82,51 +88,58 @@ export const addOrder = createAsyncThunk("order/addUpdate", async (payload) => {
   }
 });
 
-export const fetchOrder = createAsyncThunk(
-  "order/all",
-  async (payload) => {
-    try {
-      console.log("pay", JSON.stringify(payload));
-      let param = '';
-      if(payload) {
-        if(payload.from) {
-          param += `from=${payload.from}`;
-        }
-        if(payload.to) {
-          param += `&to=${payload.to}`;
-        }
-        if(payload.customer) {
-          param += `&customer=${payload.customer.id}`;
-        }
-      }
-     
-      let res;
-      if(payload) {
-        res = await backend.get(`${fetchUrl}?${param}`)
-      }
-      else {
-        res = await backend.get(fetchUrl);
-      }
-
-      if (res.status !== 200) {
-        throw new Error("Something went wrong");
-      }
-
-      console.log("fetch", res, res.data.data);
-      return res;
-    } catch (err) {
-      return err;
-    }
+export const putOrder = createAsyncThunk("order/Update", async (payload) => {
+  try {
+    console.log("pay", payload);
+    const id = payload._id;
+    delete payload._id;
+    return await backend.patch(`${fetchUrl}/${id}`, payload);
+  } catch (err) {
+    return err.message;
   }
-);
+});
+
+export const fetchOrder = createAsyncThunk("order/all", async (payload) => {
+  try {
+    console.log("pay", JSON.stringify(payload));
+    let param = "";
+    if (payload) {
+      if (payload.from) {
+        param += `from=${payload.from}`;
+      }
+      if (payload.to) {
+        param += `&to=${payload.to}`;
+      }
+      if (payload.customer) {
+        param += `&customer=${payload.customer.id}`;
+      }
+    }
+
+    let res;
+    if (payload) {
+      res = await backend.get(`${fetchUrl}?${param}`);
+    } else {
+      res = await backend.get(fetchUrl);
+    }
+
+    if (res.status !== 200) {
+      throw new Error("Something went wrong");
+    }
+
+    console.log("fetch", res, res.data.data);
+    return res;
+  } catch (err) {
+    return err;
+  }
+});
 
 const orderSlice = createSlice({
   name: "order",
   initialState: { ...initState },
   reducers: {
     getBillingItems(state, action) {
-      state.billingOrders = [...state.orders].filter(i => i);
-    }
+      state.billingOrders = [...state.orders].filter((i) => i);
+    },
   },
   extraReducers(builder) {
     builder
@@ -137,31 +150,81 @@ const orderSlice = createSlice({
           const data = action.payload.data.data.result;
           for (const key in data) {
             items.push({
-              ...data[key]
+              ...data[key],
+              rateKg: data[key].rateKg > 0 ? parseFloat(data[key].rateKg).toFixed(2) : '',
+              debitAmount: data[key].debitAmount > 0 ? parseFloat(data[key].debitAmount).toFixed(2) : '',
+              creditAmount: data[key].creditAmount > 0 ? parseFloat(data[key].creditAmount).toFixed(2) : '',
             });
           }
           state.orders = items;
           state.copyOrders = items;
           console.log(state.orders);
-          state.invNo = `ATG${Date.now()}-${++items.length}`
+          state.invNo = `ATG${Date.now()}-${++items.length}`;
         }
       })
       .addCase(addOrder.fulfilled, (state, action) => {
         console.log("calling");
         console.log(action.payload);
         if (action.payload.status !== 201) {
-          toast.error(typeof action.payload === 'string' ? action.payload : "Something went wrong", {
-            position: "top-center",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            transition: Slide,
-          });
-          throw new Error(typeof action.payload === 'string' ? action.payload : "Something went wrong");
+          toast.error(
+            typeof action.payload === "string"
+              ? action.payload
+              : "Something went wrong",
+            {
+              position: "top-center",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              transition: Slide,
+            }
+          );
+          throw new Error(
+            typeof action.payload === "string"
+              ? action.payload
+              : "Something went wrong"
+          );
+        }
+        toast.success(action.payload.data.message, {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Slide,
+        });
+      })
+      .addCase(putOrder.fulfilled, (state, action) => {
+        console.log("calling");
+        console.log(action.payload);
+        if (action.payload.status !== 200) {
+          toast.error(
+            typeof action.payload === "string"
+              ? action.payload
+              : "Something went wrong",
+            {
+              position: "top-center",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              transition: Slide,
+            }
+          );
+          throw new Error(
+            typeof action.payload === "string"
+              ? action.payload
+              : "Something went wrong"
+          );
         }
         toast.success(action.payload.data.message, {
           position: "top-center",

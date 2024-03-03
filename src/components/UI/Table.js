@@ -49,7 +49,7 @@ export default function Table(props) {
       <>
         {props.show && (
           <button
-            className={`p-button p-button-rounded p-button-success p-button-icon-only`}
+            className={`p-button p-button-rounded p-button-success p-button-icon-only ms-1`}
             type="button"
             onClick={() =>
               openDetails(rowData, options.frozenRow, options.rowIndex)
@@ -60,7 +60,7 @@ export default function Table(props) {
         )}
         {props.edit && (
           <button
-            className={`p-button p-button-rounded p-button-danger p-button-icon-only ms-1`}
+            className={`p-button p-button-rounded p-button-info p-button-icon-only ms-1`}
             type="button"
             onClick={() =>
               editItem(rowData, options.frozenRow, options.rowIndex)
@@ -71,7 +71,7 @@ export default function Table(props) {
         )}
         {props.delete && (
           <button
-            className={`p-button p-button-rounded p-button-danger p-button-icon-only`}
+            className={`p-button p-button-rounded p-button-danger p-button-icon-only ms-1`}
             type="button"
             onClick={() =>
               deleteItem(rowData, options.frozenRow, options.rowIndex)
@@ -117,7 +117,7 @@ export default function Table(props) {
   };
 
   const deleteItem = (data, frozen, index) => {
-    console.log(frozen);
+    console.log(data, "print");
     props.deleteItem(data, index);
   };
 
@@ -335,7 +335,7 @@ export default function Table(props) {
   const exportPdf = () => {
     import("jspdf").then((jsPDF) => {
       import("jspdf-autotable").then(() => {
-        const doc = new jsPDF.default(0, 0);
+        const doc = new jsPDF.default({ orientation: "l" }, 0, 0);
         const otherCol = [
           {
             title: "VCH No",
@@ -345,11 +345,9 @@ export default function Table(props) {
             title: "CL No",
             dataKey: "clNo",
           },
-          {
-            title: "QLTY(%)",
-            dataKey: "qlty",
-          },
         ];
+        const pdfColumn = [...exportColumns];
+        pdfColumn.splice(6, 0, ...otherCol);
 
         const pdfData = props.data
           .map((d) => ({
@@ -357,16 +355,32 @@ export default function Table(props) {
             invoiceNo: d.invoiceNo,
             type: d.type,
             netLeafKgs: d.netLeafKgs,
-            rateKg: d.rateKg,
+            rateKg: d.rateKg > 0 ? parseFloat(d.rateKg).toFixed(2) : d.rateKg,
             "customerId.name": d.customerId.name,
-            debitAmount: d.debitAmount,
-            creditAmount: d.creditAmount,
+            debitAmount:
+              d.debitAmount > 0
+                ? parseFloat(d.debitAmount).toFixed(2)
+                : d.debitAmount,
+            creditAmount:
+              d.creditAmount > 0
+                ? parseFloat(d.creditAmount).toFixed(2)
+                : d.creditAmount,
             vchNo: d.vchNo,
             clNo: d.clNo,
             qlty: d.qlty,
+            note: d.note,
           }))
           .filter((i) => i);
-        doc.autoTable([...exportColumns, ...otherCol], pdfData);
+        doc.autoTable(
+          [
+            ...pdfColumn,
+            {
+              title: "Note",
+              dataKey: "note",
+            },
+          ],
+          pdfData
+        );
         doc.save("invoices.pdf");
       });
     });
@@ -375,7 +389,26 @@ export default function Table(props) {
   const exportExcel = () => {
     import("xlsx").then((xlsx) => {
       const worksheet = xlsx.utils.json_to_sheet(
-        props.data.map((d) => ({ ...d, customerId: d.customerId.name }))
+        props.data.map((d) => ({
+          Date: moment(d.transactionDate).format("DD/MM/YYYY"),
+          "Invoice No": d.invoiceNo,
+          Type: d.type,
+          "Customer Name": d.customerId.name,
+          "Vch no": d.vchNo,
+          "Cl no": d.clNo,
+          "Qlty(%)": d.qlty,
+          "Net Leaf KGS": d.netLeafKgs,
+          "Rate/KG": d.rateKg > 0 ? parseFloat(d.rateKg).toFixed(2) : d.rateKg,
+          "Debit Amount":
+            d.debitAmount > 0
+              ? parseFloat(d.debitAmount).toFixed(2)
+              : d.debitAmount,
+          "Credit Amount":
+            d.creditAmount > 0
+              ? parseFloat(d.creditAmount).toFixed(2)
+              : deleteIcon.creditAmount,
+          Note: d.note,
+        }))
       );
       const workbook = { Sheets: { data: worksheet }, SheetNames: ["data"] };
       const excelBuffer = xlsx.write(workbook, {

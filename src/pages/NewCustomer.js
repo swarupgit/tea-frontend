@@ -11,6 +11,7 @@ export default function NewCustomer() {
   const customers = useSelector(allCustomers);
   const [addQuote, setAddQuote] = useState(false);
   const isUserLoggedIn = useSelector(isLoggedIn);
+ 
 
   const dispatch = useDispatch();
   

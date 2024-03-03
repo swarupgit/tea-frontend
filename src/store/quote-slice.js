@@ -9,14 +9,14 @@ const initState = {
     {
       field: "createdAt",
       header: "Created Date",
-      width: "10%",
+      width: "25%",
       sortable: true,
       filter: true,
     },
     {
       field: "name",
       header: "Customer Name",
-      width: "15%",
+      width: "20%",
       filter: true,
     },
     {
@@ -29,14 +29,15 @@ const initState = {
     {
       field: "email",
       header: "Email",
-      width: "15%",
+      width: "25%",
       filter: true,
       email: true
     },
     {
       field: "",
       header: "Action",
-      width: "10%",
+      width: "15%",
+      view: true,
     },
   ],
   customers: [],
@@ -48,6 +49,26 @@ export const addCustomer = createAsyncThunk("customer/add", async (payload) => {
     console.log("pay", payload);
 
     return await backend.post(fetchUrl, payload);
+  } catch (err) {
+    return err.message;
+  }
+});
+
+export const putCustomer = createAsyncThunk("customer/update", async (payload) => {
+  try {
+    console.log("pay", payload);
+    const id = payload.id;
+    delete payload.id;
+    return await backend.patch(`${fetchUrl}/${id}`, payload);
+  } catch (err) {
+    return err.message;
+  }
+});
+
+export const delCustomer = createAsyncThunk("customer/delete", async (payload) => {
+  try {
+    console.log("pay", payload);
+    return await backend.delete(`${fetchUrl}/${payload}`);
   } catch (err) {
     return err.message;
   }
@@ -102,6 +123,64 @@ const quoteSlice = createSlice({
         console.log("calling");
         console.log(action.payload);
         if (action.payload.status !== 201) {
+          toast.error(typeof action.payload === 'string' ? action.payload : "Something went wrong", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Slide,
+          });
+          throw new Error(typeof action.payload === 'string' ? action.payload : "Something went wrong");
+        }
+        toast.success(action.payload.data.message, {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Slide,
+        });
+      })
+      .addCase(putCustomer.fulfilled, (state, action) => {
+        console.log("calling");
+        console.log(action.payload);
+        if (action.payload.status !== 200) {
+          toast.error(typeof action.payload === 'string' ? action.payload : "Something went wrong", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Slide,
+          });
+          throw new Error(typeof action.payload === 'string' ? action.payload : "Something went wrong");
+        }
+        toast.success(action.payload.data.message, {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Slide,
+        });
+      })
+      .addCase(delCustomer.fulfilled, (state, action) => {
+        console.log("calling");
+        console.log(action.payload);
+        if (action.payload.status !== 200) {
           toast.error(typeof action.payload === 'string' ? action.payload : "Something went wrong", {
             position: "top-center",
             autoClose: 2000,
