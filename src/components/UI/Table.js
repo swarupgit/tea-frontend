@@ -1,5 +1,5 @@
 import { Fragment, useRef } from "react";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import classes from "./Table.module.css";
@@ -8,8 +8,8 @@ import { Tooltip } from "primereact/tooltip";
 import moment from "moment";
 import { InputText } from "primereact/inputtext";
 import { FilterMatchMode } from "primereact/api";
-import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
-import { Toast } from 'primereact/toast';
+import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { Toast } from "primereact/toast";
 
 export default function Table(props) {
   const [products, setProducts] = useState([]);
@@ -19,7 +19,7 @@ export default function Table(props) {
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
   const toast = useRef(null);
-  const sData = {};
+  let sData = {};
   useEffect(() => {
     setProducts(props.data);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -106,8 +106,7 @@ export default function Table(props) {
     );
   };
   const formattedDate = (rowData, options) => {
-    return (
-      rowData ? (
+    return rowData ? (
       <span>
         <span className="d-none">
           {moment(rowData.transactionDate ?? rowData.createdAt).format(
@@ -118,31 +117,41 @@ export default function Table(props) {
           "DD/MM/YYYY"
         )}
       </span>
-      ) : ''
+    ) : (
+      ""
     );
   };
 
   const accept = () => {
     console.log(sData, "print");
-    props.deleteItem(sData);  
-    toast.current.show({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
-  }
+    props.deleteItem(sData);
+    toast.current.show({
+      severity: "info",
+      summary: "Confirmed",
+      detail: "You have accepted",
+      life: 3000,
+    });
+  };
 
   const reject = () => {
-    toast.current.show({ severity: 'warn', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
-  }
-
+    toast.current.show({
+      severity: "warn",
+      summary: "Rejected",
+      detail: "You have rejected",
+      life: 3000,
+    });
+  };
 
   const deleteItem = (data, frozen, index) => {
-    sData = {...data};
+    sData = { ...data };
     confirmDialog({
-        message: 'Do you want to delete this record?',
-        header: 'Delete Confirmation',
-        icon: 'pi pi-info-circle',
-        defaultFocus: 'reject',
-        acceptClassName: 'p-button-danger',
-        accept,
-        reject
+      message: "Do you want to delete this record?",
+      header: "Delete Confirmation",
+      icon: "pi pi-info-circle",
+      defaultFocus: "reject",
+      acceptClassName: "p-button-danger",
+      accept,
+      reject,
     });
   };
 
@@ -373,33 +382,57 @@ export default function Table(props) {
         ];
         const pdfColumn = [...exportColumns];
         pdfColumn.splice(6, 0, ...otherCol);
-        const totalNetLeaf = props.data.reduce((carry, item) => {
-          return item.netLeafKgs ? carry + parseFloat(item.netLeafKgs) : carry + 0;
-        }, 0).toFixed(2);
+        const totalNetLeaf = props.data
+          .reduce((carry, item) => {
+            return item.netLeafKgs
+              ? carry + parseFloat(item.netLeafKgs)
+              : carry + 0;
+          }, 0)
+          .toFixed(2);
         const totalDebitAmount = props.data
           .reduce((carry, item) => {
-            return item.debitAmount > 0 ? carry + parseFloat(item.debitAmount) : carry + 0;
+            return item.debitAmount > 0
+              ? carry + parseFloat(item.debitAmount)
+              : carry + 0;
           }, 0)
           .toFixed(2);
         const totalCreditAmount = props.data
           .reduce((carry, item) => {
-            return item.creditAmount > 0 ? carry + parseFloat(item.creditAmount) : carry + 0;
+            return item.creditAmount > 0
+              ? carry + parseFloat(item.creditAmount)
+              : carry + 0;
           }, 0)
           .toFixed(2);
-        const final = {
-          transactionDate: '',
-          invoiceNo: 'Total',
-          type: '',
-          netLeafKgs: totalNetLeaf,
-          rateKg: '',
-          "customerId.name": '',
-          debitAmount: totalDebitAmount,
-          creditAmount: totalCreditAmount,
-          vchNo: '',
-          clNo: '',
-          qlty: '',
-          note: `Outstanding: ${totalCreditAmount - totalDebitAmount}`,          
-        };
+        const final = [
+          {
+            transactionDate: "",
+            invoiceNo: "",
+            type: "",
+            netLeafKgs: "",
+            rateKg: "",
+            "customerId.name": "",
+            debitAmount: "",
+            creditAmount: "",
+            vchNo: "",
+            clNo: "",
+            qlty: "",
+            note: ``,
+          },
+          {
+            transactionDate: "",
+            invoiceNo: "",
+            type: "",
+            netLeafKgs: totalNetLeaf,
+            rateKg: "",
+            "customerId.name": "Total",
+            debitAmount: totalDebitAmount,
+            creditAmount: totalCreditAmount,
+            vchNo: "",
+            clNo: "",
+            qlty: "",
+            note: `Outstanding: ${totalCreditAmount - totalDebitAmount}`,
+          },
+        ];
 
         const pdfData = props.data
           .map((d) => ({
@@ -440,34 +473,59 @@ export default function Table(props) {
 
   const exportExcel = () => {
     import("xlsx").then((xlsx) => {
-      const totalNetLeaf = props.data.reduce((carry, item) => {
-          return item.netLeafKgs ? carry + parseFloat(item.netLeafKgs) : carry + 0;
-        }, 0).toFixed(2);
-        const totalDebitAmount = props.data
-          .reduce((carry, item) => {
-            return item.debitAmount > 0 ? carry + parseFloat(item.debitAmount) : carry + 0;
-          }, 0)
-          .toFixed(2);
-        const totalCreditAmount = props.data
-          .reduce((carry, item) => {
-            return item.creditAmount > 0 ? carry + parseFloat(item.creditAmount) : carry + 0;
-          }, 0)
-          .toFixed(2);
-        const final = {
-          transactionDate: '',
-          invoiceNo: 'Total',
-          type: '',
-          netLeafKgs: totalNetLeaf,
-          rateKg: '',
-          "customerId.name": '',
-          debitAmount: totalDebitAmount,
-          creditAmount: totalCreditAmount,
-          vchNo: '',
-          clNo: '',
-          qlty: '',
-          note: `Outstanding: ${totalCreditAmount - totalDebitAmount}`,          
-        };
-      const xlData = props.data.map((d) => ({
+      const totalNetLeaf = props.data
+        .reduce((carry, item) => {
+          return item.netLeafKgs
+            ? carry + parseFloat(item.netLeafKgs)
+            : carry + 0;
+        }, 0)
+        .toFixed(2);
+      const totalDebitAmount = props.data
+        .reduce((carry, item) => {
+          return item.debitAmount > 0
+            ? carry + parseFloat(item.debitAmount)
+            : carry + 0;
+        }, 0)
+        .toFixed(2);
+      const totalCreditAmount = props.data
+        .reduce((carry, item) => {
+          return item.creditAmount > 0
+            ? carry + parseFloat(item.creditAmount)
+            : carry + 0;
+        }, 0)
+        .toFixed(2);
+      const final = [
+        {
+          Date: "",
+          "Invoice No": "",
+          Type: "",
+          "Customer Name": "",
+          "Vch no": "",
+          "Cl no": "",
+          "Qlty(%)": "",
+          "Net Leaf KGS": "",
+          "Rate/KG": "",
+          "Debit Amount": "",
+          "Credit Amount": "",
+          Note: ``,
+        },
+        {
+          Date: "",
+          "Invoice No": "",
+          Type: "",
+          "Customer Name": "",
+          "Vch no": "",
+          "Cl no": "Total",
+          "Qlty(%)": "",
+          "Net Leaf KGS": totalNetLeaf,
+          "Rate/KG": "",
+          "Debit Amount": totalDebitAmount,
+          "Credit Amount": totalCreditAmount,
+          Note: `Outstanding: ${totalCreditAmount - totalDebitAmount}`,
+        },
+      ];
+      const xlData = props.data
+        .map((d) => ({
           Date: moment(d.transactionDate).format("DD/MM/YYYY"),
           "Invoice No": d.invoiceNo,
           Type: d.type,
@@ -486,10 +544,9 @@ export default function Table(props) {
               ? parseFloat(d.creditAmount).toFixed(2)
               : deleteIcon.creditAmount,
           Note: d.note,
-        }));
-      const worksheet = xlsx.utils.json_to_sheet(
-        [...xlData, ...final]
-      );
+        }))
+        .filter((i) => i);
+      const worksheet = xlsx.utils.json_to_sheet([...xlData, ...final]);
       const workbook = { Sheets: { data: worksheet }, SheetNames: ["data"] };
       const excelBuffer = xlsx.write(workbook, {
         bookType: "xlsx",

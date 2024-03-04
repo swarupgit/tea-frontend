@@ -63,6 +63,7 @@ export default function CustomerList() {
             className="theme-button"
             type="button"
             onClick={showAddQuoteHandler}
+            style={{ backgroundColor: "#e10d68"}}
           >
             Add a New Customer
           </button>
