@@ -371,6 +371,33 @@ export default function Table(props) {
         ];
         const pdfColumn = [...exportColumns];
         pdfColumn.splice(6, 0, ...otherCol);
+        const totalNetLeaf = props.data.reduce((carry, item) => {
+          return item.netLeafKgs ? carry + parseFloat(item.netLeafKgs) : carry + 0;
+        }, 0).toFixed(2);
+        const totalDebitAmount = props.data
+          .reduce((carry, item) => {
+            return item.debitAmount > 0 ? carry + parseFloat(item.debitAmount) : carry + 0;
+          }, 0)
+          .toFixed(2);
+        const totalCreditAmount = props.data
+          .reduce((carry, item) => {
+            return item.creditAmount > 0 ? carry + parseFloat(item.creditAmount) : carry + 0;
+          }, 0)
+          .toFixed(2);
+        const final = {
+          transactionDate: '',
+          invoiceNo: 'Total',
+          type: '',
+          netLeafKgs: totalNetLeaf,
+          rateKg: '',
+          "customerId.name": '',
+          debitAmount: totalDebitAmount,
+          creditAmount: totalCreditAmount,
+          vchNo: '',
+          clNo: '',
+          qlty: '',
+          note: `Outstanding: ${totalCreditAmount - totalDebitAmount}`,          
+        };
 
         const pdfData = props.data
           .map((d) => ({
@@ -402,7 +429,7 @@ export default function Table(props) {
               dataKey: "note",
             },
           ],
-          pdfData
+          [...pdfData, ...final]
         );
         doc.save("invoices.pdf");
       });
@@ -411,8 +438,34 @@ export default function Table(props) {
 
   const exportExcel = () => {
     import("xlsx").then((xlsx) => {
-      const worksheet = xlsx.utils.json_to_sheet(
-        props.data.map((d) => ({
+      const totalNetLeaf = props.data.reduce((carry, item) => {
+          return item.netLeafKgs ? carry + parseFloat(item.netLeafKgs) : carry + 0;
+        }, 0).toFixed(2);
+        const totalDebitAmount = props.data
+          .reduce((carry, item) => {
+            return item.debitAmount > 0 ? carry + parseFloat(item.debitAmount) : carry + 0;
+          }, 0)
+          .toFixed(2);
+        const totalCreditAmount = props.data
+          .reduce((carry, item) => {
+            return item.creditAmount > 0 ? carry + parseFloat(item.creditAmount) : carry + 0;
+          }, 0)
+          .toFixed(2);
+        const final = {
+          transactionDate: '',
+          invoiceNo: 'Total',
+          type: '',
+          netLeafKgs: totalNetLeaf,
+          rateKg: '',
+          "customerId.name": '',
+          debitAmount: totalDebitAmount,
+          creditAmount: totalCreditAmount,
+          vchNo: '',
+          clNo: '',
+          qlty: '',
+          note: `Outstanding: ${totalCreditAmount - totalDebitAmount}`,          
+        };
+      const xlData = props.data.map((d) => ({
           Date: moment(d.transactionDate).format("DD/MM/YYYY"),
           "Invoice No": d.invoiceNo,
           Type: d.type,
@@ -431,7 +484,9 @@ export default function Table(props) {
               ? parseFloat(d.creditAmount).toFixed(2)
               : deleteIcon.creditAmount,
           Note: d.note,
-        }))
+        }));
+      const worksheet = xlsx.utils.json_to_sheet(
+        [...xlData, ...final]
       );
       const workbook = { Sheets: { data: worksheet }, SheetNames: ["data"] };
       const excelBuffer = xlsx.write(workbook, {
