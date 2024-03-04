@@ -238,6 +238,7 @@ const Stock = (props) => {
             readOnlyInput
             showIcon
             style={{ flex: "3.1 1" }}
+            touchUI
           />
         </div>
         <div className={`${classes.control}`}>

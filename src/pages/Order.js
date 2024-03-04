@@ -167,6 +167,7 @@ export default function Order() {
             dateFormat="dd/mm/yy"
             placeholder="Select a Date"
             showIcon
+            touchUI
           />
           <label className="space-both">To</label>
           <Calendar
@@ -177,6 +178,7 @@ export default function Order() {
             placeholder="Select a Date"
             showIcon
             disabled={!fromDate}
+            touchUI
           />
         </div>
         <div className="col-md-3">
