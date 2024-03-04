@@ -19,7 +19,7 @@ export default function Table(props) {
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
   const toast = useRef(null);
-  const [sData, setSData] = useState();
+  const sData = {};
   useEffect(() => {
     setProducts(props.data);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -132,7 +132,7 @@ export default function Table(props) {
 
 
   const deleteItem = (data, frozen, index) => {
-    setSData(data);
+    sData = {...data};
     confirmDialog({
         message: 'Do you want to delete this record?',
         header: 'Delete Confirmation',
