@@ -113,7 +113,7 @@ const NewQuote = (props) => {
       <button className={classes.default} type="button" onClick={props.onClose}>
         Close
       </button>
-      {!validating && !props.editingItem && (
+      {!validating && !props.editingItem.id && (
         <button
           className={classes.button}
           type="submit"

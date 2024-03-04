@@ -11,51 +11,51 @@ import { Calendar } from "primereact/calendar";
 const Stock = (props) => {
   const itemCode = useSelector(invNo);
   const [invoiceNoIsValid, setInvoiceNoIsValid] = useState(
-    props.editingItem._id ? true : false
+    props.editingItem && props.editingItem._id ? true : false
   );
   const [validating, setValidating] = useState(false);
   const [formIsValid, setFormIsValid] = useState(
-    props.editingItem._id ? true : false
+    props.editingItem && props.editingItem._id ? true : false
   );
   const [enteredInvoiceNo, setEnteredInvoiceNo] = useState(
-    props.editingItem._id ? props.editingItem.invoiceNo : itemCode
+    props.editingItem && props.editingItem._id ? props.editingItem.invoiceNo : itemCode
   );
   const [enteredType, setEnteredType] = useState(
-    props.editingItem._id ? props.editingItem.type : ""
+    props.editingItem && props.editingItem._id ? props.editingItem.type : ""
   );
   const [enteredVch, setEnteredVch] = useState(
-    props.editingItem._id ? props.editingItem.vchNo : ""
+    props.editingItem && props.editingItem._id ? props.editingItem.vchNo : ""
   );
   const [enteredCl, setEnteredCl] = useState(
-    props.editingItem._id ? props.editingItem.clNo : ""
+    props.editingItem && props.editingItem._id ? props.editingItem.clNo : ""
   );
   const [enteredQlty, setEnteredQlty] = useState(
-    props.editingItem._id ? props.editingItem.qlty : ""
+    props.editingItem && props.editingItem._id ? props.editingItem.qlty : ""
   );
   const [enteredPrice, setEnteredPrice] = useState(
-    props.editingItem._id
+    props.editingItem && props.editingItem._id
       ? props.editingItem.type === "payment"
         ? props.editingItem.debitAmount
         : props.editingItem.creditAmount
       : ""
   );
   const [enteredNote, setEnteredNote] = useState(
-    props.editingItem._id ? props.editingItem.note : ""
+    props.editingItem && props.editingItem._id ? props.editingItem.note : ""
   );
   const [enteredNetLeaf, setEnteredNetLeaf] = useState(
-    props.editingItem._id ? props.editingItem.netLeafKgs : ""
+    props.editingItem && props.editingItem._id ? props.editingItem.netLeafKgs : ""
   );
   const [enteredRate, setEnteredRate] = useState(
-    props.editingItem._id ? props.editingItem.rateKg : ""
+    props.editingItem && props.editingItem._id ? props.editingItem.rateKg : ""
   );
   const customers = useSelector(allCustomers);
   const [selectedCustomer, setSelectedCustomer] = useState(
-    props.editingItem._id
+    props.editingItem && props.editingItem._id
       ? customers.find((i) => i.id === props.editingItem.customerId._id) || false
       : false
   );
   const [selectedDate, setSelectedDate] = useState(
-    props.editingItem._id ? new Date(props.editingItem.transactionDate) : new Date()
+    props.editingItem && props.editingItem._id ? new Date(props.editingItem.transactionDate) : new Date()
   );
 
   const dispatch = useDispatch();
@@ -206,7 +206,7 @@ const Stock = (props) => {
           Save
         </button>
       )}
-      {!validating && props.editingItem._id && (
+      {!validating && props.editingItem && props.editingItem._id && (
         <button
           className={classes.button}
           type="button"

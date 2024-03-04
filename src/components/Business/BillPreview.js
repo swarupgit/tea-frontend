@@ -129,7 +129,7 @@ const BillPreview = (props) => {
   );
 
   const totalAmount = props.billingData.reduce((carry, item) => {
-    return parseFloat(item.creditAmount) + carry;
+    return item.creditAmount > 0 ? parseFloat(item.creditAmount) + carry : carry + 0;
   }, 0).toFixed(2);
 
   const sellerChangeHandler = (e) => {

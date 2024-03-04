@@ -103,6 +103,7 @@ export default function Table(props) {
   };
   const formattedDate = (rowData, options) => {
     return (
+      rowData ? (
       <span>
         <span className="d-none">
           {moment(rowData.transactionDate ?? rowData.createdAt).format(
@@ -113,6 +114,7 @@ export default function Table(props) {
           "DD/MM/YYYY"
         )}
       </span>
+      ) : ''
     );
   };
 
