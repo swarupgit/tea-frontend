@@ -22,6 +22,7 @@ function Dashboard() {
   const isUserLoggedIn = useSelector(isLoggedIn);
   const userType = useSelector(type);
   const dispatch = useDispatch();
+  
 
   const showCartHandler = () => {
     setCartIsShown(true);

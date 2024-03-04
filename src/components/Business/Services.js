@@ -5,14 +5,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { isLoggedIn, token } from "../../store/auth-slice";
 import { fetchItems } from "../../store/items-slice";
 import BusinessStatistic from "./BusinessStatistic";
+import { allOrders, fetchOrder } from "../../store/order-slice";
 
 const Services = (props) => {
   const userToken = useSelector(token);
   const dispatch = useDispatch();
   const isUserLoggedIn = useSelector(isLoggedIn);
+  const orders = useSelector(allOrders);
 
   const loadData = async () => {
-    await dispatch(fetchItems({ token: userToken }));
+    // await dispatch(fetchItems({ token: userToken }));
+    await dispatch(fetchOrder());
   };
 
   useEffect(() => {
