@@ -1,5 +1,5 @@
 import { Fragment, useRef } from "react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import classes from "./Table.module.css";
@@ -8,6 +8,8 @@ import { Tooltip } from "primereact/tooltip";
 import moment from "moment";
 import { InputText } from "primereact/inputtext";
 import { FilterMatchMode } from "primereact/api";
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
+import { Toast } from 'primereact/toast';
 
 export default function Table(props) {
   const [products, setProducts] = useState([]);
@@ -16,6 +18,7 @@ export default function Table(props) {
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
+  const toast = useRef(null);
   useEffect(() => {
     setProducts(props.data);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -116,9 +119,27 @@ export default function Table(props) {
     );
   };
 
-  const deleteItem = (data, frozen, index) => {
+  const accept = () => {
     console.log(data, "print");
-    props.deleteItem(data, index);
+    props.deleteItem(data, index);  
+    toast.current.show({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+  }
+
+  const reject = () => {
+    toast.current.show({ severity: 'warn', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+  }
+
+
+  const deleteItem = (data, frozen, index) => {
+    confirmDialog({
+        message: 'Do you want to delete this record?',
+        header: 'Delete Confirmation',
+        icon: 'pi pi-info-circle',
+        defaultFocus: 'reject',
+        acceptClassName: 'p-button-danger',
+        accept,
+        reject
+    });
   };
 
   const editItem = (data, frozen, index) => {
@@ -439,6 +460,8 @@ export default function Table(props) {
   };
   return (
     <Fragment>
+      <Toast ref={toast} />
+      <ConfirmDialog />
       <DataTable
         ref={dt}
         value={props.data}
