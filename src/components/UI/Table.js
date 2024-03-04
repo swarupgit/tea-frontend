@@ -19,6 +19,7 @@ export default function Table(props) {
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
   const toast = useRef(null);
+  const [sData, setSData] = useState();
   useEffect(() => {
     setProducts(props.data);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -120,8 +121,8 @@ export default function Table(props) {
   };
 
   const accept = () => {
-    console.log(data, "print");
-    props.deleteItem(data, index);  
+    console.log(sData, "print");
+    props.deleteItem(sData);  
     toast.current.show({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
   }
 
@@ -131,6 +132,7 @@ export default function Table(props) {
 
 
   const deleteItem = (data, frozen, index) => {
+    setSData(data);
     confirmDialog({
         message: 'Do you want to delete this record?',
         header: 'Delete Confirmation',
