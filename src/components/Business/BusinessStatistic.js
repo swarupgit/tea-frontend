@@ -39,6 +39,33 @@ const BusinessStatistic = () => {
       return (new Date(item.transactionDate)).getDate() === (new Date()).getDate() && item.creditAmount > 0 ? carry + parseFloat(item.creditAmount) : carry + 0;
     }, 0)
     .toFixed(2);
+  let top = {
+    _id: '',
+    name: '',
+    count: 0
+  };
+  if(orders.length) {
+    let maxCustomer = [];
+    data.forEach((d, i) => {
+      if(d.customerId._id in maxCustomer) {
+        maxCustomer[d.customerId._id]['count'] = ++maxCustomer[d.customerId._id]['count'];
+      }
+      else {
+        maxCustomer[d.customerId._id] = {
+          _id: d.customerId._id,
+          name: d.customerId.name,
+          count: 1
+        };
+      }
+    });
+    maxCustomer = Object.values(maxCustomer);
+    top = {...maxCustomer[0]};
+    maxCustomer.forEach((c, i) => {
+      if(c.count > top.count) {
+        top = {...c};
+      }
+    });
+  }
   return (
     <Fragment>
       <div className={`row ${classes.cardRow}`}>
@@ -211,7 +238,7 @@ const BusinessStatistic = () => {
                   <h5 className="card-title text-uppercase text-muted mb-0">
                     Top Customer
                   </h5>
-                  <span className="h2 font-weight-bold mb-0">Mansur</span>
+                  <span className="h2 font-weight-bold mb-0">{top?.name || ''}</span>
                 </div>
                 <div className="col-auto">
                   <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
