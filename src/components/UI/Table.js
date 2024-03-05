@@ -109,11 +109,11 @@ export default function Table(props) {
     return rowData ? (
       <span>
         <span className="d-none">
-          {moment(rowData.transactionDate ?? rowData.createdAt).format(
+          {moment(rowData.transactionDate ?? rowData.createdAt).utc().format(
             "YYYYMMDD"
           )}
         </span>
-        {moment(rowData.transactionDate ?? rowData.createdAt).format(
+        {moment(rowData.transactionDate ?? rowData.createdAt).utc().format(
           "DD/MM/YYYY"
         )}
       </span>
@@ -465,13 +465,15 @@ export default function Table(props) {
             },
           ],
           [...pdfData, ...final],
-          didParseCell: function(cell, data) {
-            if (data.row.length === (pdfData.length +2)) {
-              cell.styles.fontStyle = 'bold';
-            }
-          }
+          // {
+          //   didParseCell: function (cell, data) {
+          //     if (data.row.length === pdfData.length + 2) {
+          //       cell.styles.fontStyle = "bold";
+          //     }
+          //   },
+          // }
         );
-        doc.save(`${props.filetext || 'invoices'}.pdf`);
+        doc.save(`${props.filetext || "invoices"}.pdf`);
       });
     });
   };
@@ -558,7 +560,7 @@ export default function Table(props) {
         type: "array",
       });
 
-      saveAsExcelFile(excelBuffer, `${ props.filetext || 'invoices'}`);
+      saveAsExcelFile(excelBuffer, `${props.filetext || "invoices"}`);
     });
   };
 
