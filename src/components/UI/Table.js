@@ -465,13 +465,14 @@ export default function Table(props) {
             },
           ],
           [...pdfData, ...final],
-          // {
-          //   didParseCell: function (cell, data) {
-          //     if (data.row.length === pdfData.length + 2) {
-          //       cell.styles.fontStyle = "bold";
-          //     }
-          //   },
-          // }
+          {
+            didParseCell: function (cell, data) {
+              if (cell.table.body.length === pdfData.length + 2) {
+                // cell.styles.fontStyle = "bold";
+                // console.log(cell.table.body, cell)
+              }
+            },
+          }
         );
         doc.save(`${props.filetext || "invoices"}.pdf`);
       });
