@@ -46,7 +46,7 @@ const BusinessStatistic = () => {
   };
   if(orders.length) {
     let maxCustomer = [];
-    data.forEach((d, i) => {
+    orders.forEach((d, i) => {
       if(d.customerId._id in maxCustomer) {
         maxCustomer[d.customerId._id]['count'] = ++maxCustomer[d.customerId._id]['count'];
       }
