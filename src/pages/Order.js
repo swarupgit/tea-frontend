@@ -255,6 +255,13 @@ export default function Order() {
           editItem={editItem}
           show={true}
           edit={true}
+          filetext={selectedCustomer
+        ? `${moment(fromDate).format("YYYY-MM-DD")} - ${moment(toDate).format(
+            "YYYY-MM-DD"
+          )} | ${selectedCustomer.name}`
+        : `${moment(fromDate).format("YYYY-MM-DD")} - ${moment(toDate).format(
+            "YYYY-MM-DD"
+          )}`}
         />
         <div className="text-white">
           <table style={{ width: "100%"}}>
