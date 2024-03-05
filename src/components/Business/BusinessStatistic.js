@@ -43,7 +43,7 @@ const BusinessStatistic = () => {
     <Fragment>
       <div className={`row ${classes.cardRow}`}>
         <div className="col-xl-3 col-lg-6 mb-2">
-          <div className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`}>
+          <div className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`} style={{ backgroundColor: "#FF0000"}}>
             <div className="card-body">
               <div className="row">
                 <div className="col">
@@ -66,7 +66,7 @@ const BusinessStatistic = () => {
           </div>
         </div>
         <div className="col-xl-3 col-lg-6 mb-2">
-          <div className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`}>
+          <div className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`} style={{ backgroundColor: "#0000FF"}}>
             <div className="card-body">
               <div className="row">
                 <div className="col">
@@ -89,7 +89,7 @@ const BusinessStatistic = () => {
           </div>
         </div>
         <div className="col-xl-3 col-lg-6 mb-2">
-          <div className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`}>
+          <div className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`} style={{ backgroundColor: "#800000"}}>
             <div className="card-body">
               <div className="row">
                 <div className="col">
@@ -112,7 +112,7 @@ const BusinessStatistic = () => {
           </div>
         </div>
         <div className="col-xl-3 col-lg-6 mb-2">
-          <div className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`}>
+          <div className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`} style={{ backgroundColor: "#00008B"}}>
             <div className="card-body">
               <div className="row">
                 <div className="col">
@@ -135,7 +135,7 @@ const BusinessStatistic = () => {
           </div>
         </div>
         <div className="col-xl-3 col-lg-6 mb-2">
-          <div className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`}>
+          <div className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`} style={{ backgroundColor: "#800080"}}>
             <div className="card-body">
               <div className="row">
                 <div className="col">
@@ -158,7 +158,7 @@ const BusinessStatistic = () => {
           </div>
         </div>
         <div className="col-xl-3 col-lg-6 mb-2">
-          <div className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`}>
+          <div className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`} style={{ backgroundColor: "#008000"}}>
             <div className="card-body">
               <div className="row">
                 <div className="col">
@@ -181,7 +181,7 @@ const BusinessStatistic = () => {
           </div>
         </div>
         <div className="col-xl-3 col-lg-6 mb-2">
-          <div className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`}>
+          <div className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`} style={{ backgroundColor: "#FFA500"}}>
             <div className="card-body">
               <div className="row">
                 <div className="col">
@@ -189,6 +189,29 @@ const BusinessStatistic = () => {
                     Today's Debit Amount
                   </h5>
                   <span className="h2 font-weight-bold mb-0">₹ {todayDebitAmount}</span>
+                </div>
+                <div className="col-auto">
+                  <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                    <i className="fas fa-users"></i>
+                  </div>
+                </div>
+              </div>
+              <p
+                className={`mt-3 mb-0 text-muted text-sm ${classes.cardSpace}`}
+              >
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="col-xl-3 col-lg-6 mb-2">
+          <div className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`} style={{ backgroundColor: "#08A04B"}}>
+            <div className="card-body">
+              <div className="row">
+                <div className="col">
+                  <h5 className="card-title text-uppercase text-muted mb-0">
+                    Top Customer
+                  </h5>
+                  <span className="h2 font-weight-bold mb-0">Mansur</span>
                 </div>
                 <div className="col-auto">
                   <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
