@@ -239,7 +239,7 @@ const BillPreview = (props) => {
                           className={`${classes["table-row"]} table-row`}
                         >
                           <td>
-                            {moment(item.transactionDate).format("DD/MM/YYYY")}
+                            {moment(item.transactionDate).utc().format("DD/MM/YYYY")}
                           </td>
                           <td>{item.clNo}</td>
                           <td>{item.qlty}</td>
