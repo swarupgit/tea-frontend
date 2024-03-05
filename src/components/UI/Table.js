@@ -464,9 +464,14 @@ export default function Table(props) {
               dataKey: "note",
             },
           ],
-          [...pdfData, ...final]
+          [...pdfData, ...final],
+          didParseCell: function(cell, data) {
+            if (data.row.length === (pdfData.length +2)) {
+              cell.styles.fontStyle = 'bold';
+            }
+          }
         );
-        doc.save("invoices.pdf");
+        doc.save(`${props.filetext || 'invoices'}.pdf`);
       });
     });
   };
@@ -553,7 +558,7 @@ export default function Table(props) {
         type: "array",
       });
 
-      saveAsExcelFile(excelBuffer, "invoices");
+      saveAsExcelFile(excelBuffer, `${ props.filetext || 'invoices'}`);
     });
   };
 
