@@ -436,7 +436,7 @@ export default function Table(props) {
 
         const pdfData = props.data
           .map((d) => ({
-            transactionDate: moment(d.transactionDate).format("DD/MM/YYYY"),
+            transactionDate: moment(d.transactionDate).utc().format("DD/MM/YYYY"),
             invoiceNo: d.invoiceNo,
             type: d.type,
             netLeafKgs: d.netLeafKgs,
@@ -534,7 +534,7 @@ export default function Table(props) {
       ];
       const xlData = props.data
         .map((d) => ({
-          Date: moment(d.transactionDate).format("DD/MM/YYYY"),
+          Date: moment(d.transactionDate).utc().format("DD/MM/YYYY"),
           "Invoice No": d.invoiceNo,
           Type: d.type,
           "Customer Name": d.customerId.name,
