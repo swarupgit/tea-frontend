@@ -74,7 +74,7 @@ const BusinessStatistic = () => {
             <div className="card-body">
               <div className="row">
                 <div className="col">
-                  <h5 className="card-title text-uppercase text-muted mb-0">
+                  <h5 className="card-title text-uppercase mb-0">
                     Total Green Leaves
                   </h5>
                   <span className="h2 font-weight-bold mb-0">{totalNetLeaf} KG</span>
@@ -97,7 +97,7 @@ const BusinessStatistic = () => {
             <div className="card-body">
               <div className="row">
                 <div className="col">
-                  <h5 className="card-title text-uppercase text-muted mb-0">
+                  <h5 className="card-title text-uppercase mb-0">
                     Total Credit Amount
                   </h5>
                   <span className="h2 font-weight-bold mb-0">₹ {totalCreditAmount}</span>
@@ -120,7 +120,7 @@ const BusinessStatistic = () => {
             <div className="card-body">
               <div className="row">
                 <div className="col">
-                  <h5 className="card-title text-uppercase text-muted mb-0">
+                  <h5 className="card-title text-uppercase mb-0">
                     Total Debit Amount
                   </h5>
                   <span className="h2 font-weight-bold mb-0">₹ {totalDebitAmount}</span>
@@ -143,7 +143,7 @@ const BusinessStatistic = () => {
             <div className="card-body">
               <div className="row">
                 <div className="col">
-                  <h5 className="card-title text-uppercase text-muted mb-0">
+                  <h5 className="card-title text-uppercase mb-0">
                     This Month's Credit Amount
                   </h5>
                   <span className="h2 font-weight-bold mb-0">₹ {monthCreditAmount}</span>
@@ -166,7 +166,7 @@ const BusinessStatistic = () => {
             <div className="card-body">
               <div className="row">
                 <div className="col">
-                  <h5 className="card-title text-uppercase text-muted mb-0">
+                  <h5 className="card-title text-uppercase mb-0">
                     This Month's Debit Amount
                   </h5>
                   <span className="h2 font-weight-bold mb-0">₹ {monthDebitAmount}</span>
@@ -189,7 +189,7 @@ const BusinessStatistic = () => {
             <div className="card-body">
               <div className="row">
                 <div className="col">
-                  <h5 className="card-title text-uppercase text-muted mb-0">
+                  <h5 className="card-title text-uppercase mb-0">
                     Today's Credit Amount
                   </h5>
                   <span className="h2 font-weight-bold mb-0">₹ {todayCreditAmount}</span>
@@ -212,7 +212,7 @@ const BusinessStatistic = () => {
             <div className="card-body">
               <div className="row">
                 <div className="col">
-                  <h5 className="card-title text-uppercase text-muted mb-0">
+                  <h5 className="card-title text-uppercase mb-0">
                     Today's Debit Amount
                   </h5>
                   <span className="h2 font-weight-bold mb-0">₹ {todayDebitAmount}</span>
@@ -235,7 +235,7 @@ const BusinessStatistic = () => {
             <div className="card-body">
               <div className="row">
                 <div className="col">
-                  <h5 className="card-title text-uppercase text-muted mb-0">
+                  <h5 className="card-title text-uppercase mb-0">
                     Top Customer
                   </h5>
                   <span className="h2 font-weight-bold mb-0">{top?.name || ''}</span>
