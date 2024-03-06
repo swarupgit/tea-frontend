@@ -22,7 +22,7 @@ const Services = (props) => {
   return (
     <Fragment>
       {isUserLoggedIn && <BusinessStatistic/>}
-      <ServicesSummary />
+{/* <ServicesSummary /> */}
       {/* {isUserLoggedIn && <AvailableServices />} */}
     </Fragment>
   );
