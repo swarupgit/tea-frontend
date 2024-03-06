@@ -262,7 +262,7 @@ const BillPreview = (props) => {
                 </tr>
                 <tr>
                   <th colSpan={7}>
-                    Amount in words: {toWords.convert(totalAmount)}
+                    Amount in words: {toWords.convert(totalAmount)}.
                   </th>
                 </tr>
                 <tr>
