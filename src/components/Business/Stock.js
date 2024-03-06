@@ -7,6 +7,7 @@ import { Dropdown } from "primereact/dropdown";
 import { allCustomers } from "../../store/quote-slice";
 import { addOrder, fetchOrder, invNo } from "../../store/order-slice";
 import { Calendar } from "primereact/calendar";
+import moment from "moment";
 
 const Stock = (props) => {
   const itemCode = useSelector(invNo);
@@ -120,15 +121,16 @@ const Stock = (props) => {
     setEnteredRate(event.target.value);
     setEnteredPrice(0);
     if (enteredNetLeaf && event.target.value) {
+      const pr = parseFloat(enteredNetLeaf) * parseFloat(event.target.value);
       setEnteredPrice(
-        parseFloat(enteredNetLeaf) * parseFloat(event.target.value)
+        pr
       );
       setFormIsValid(
         enteredInvoiceNo.length > 3 &&
           selectedCustomer.id &&
-          enteredPrice > 0 &&
+          pr > 0 &&
           event.target.value > 0
-      );
+      );      
     }
   };
 
@@ -232,7 +234,7 @@ const Stock = (props) => {
           <label htmlFor="date">Date</label>
           <Calendar
             value={selectedDate}
-            onChange={(e) => setSelectedDate(e.value)}
+            onChange={(e) => setSelectedDate(moment(e.value).format('YYYY-MM-DD'))}
             dateFormat="yy-mm-dd"
             placeholder="Select a Date"
             readOnlyInput
