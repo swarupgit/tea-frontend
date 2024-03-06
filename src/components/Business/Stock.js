@@ -153,7 +153,7 @@ const Stock = (props) => {
         : 0,
     note: enteredNote,
     customerId: selectedCustomer.id,
-    transactionDate: selectedDate,
+    transactionDate: moment(selectedDate).format('YYYY-MM-DD'),
   };
 
   const submitHandler = async (event) => {
@@ -234,7 +234,7 @@ const Stock = (props) => {
           <label htmlFor="date">Date</label>
           <Calendar
             value={selectedDate}
-            onChange={(e) => setSelectedDate(moment(e.value).format('YYYY-MM-DD'))}
+            onChange={(e) => setSelectedDate(e.value)}
             dateFormat="yy-mm-dd"
             placeholder="Select a Date"
             readOnlyInput
