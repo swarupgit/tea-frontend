@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { canManage, isLoggedIn } from "../../store/auth-slice";
+import { canManage, isLoggedIn, loggedInUser } from "../../store/auth-slice";
 import { getAllCartItems } from "../../store/cart-slice";
 import Logout from "../UI/Logout";
 import HeaderCartButton from "./HeaderCartButton";
@@ -14,6 +14,8 @@ const Navigation = (props) => {
   const hasItems = cart.length > 0;
   const isUserLoggedIn = useSelector(isLoggedIn);
   const userCanManage = useSelector(canManage);
+  const loggedUser = useSelector(loggedInUser);
+  const parsedLoggedUser = typeof loggedUser === 'string' ? JSON.parse(loggedUser) : loggedUser;
 
   return (
     <Navbar fixed="top" variant="dark" expand="lg" className={classes.navbar}>
@@ -85,6 +87,14 @@ const Navigation = (props) => {
                 <HeaderCartButton onClick={props.onShowCart} />
               </Nav.Link>
             )}
+          </Nav>
+          <Nav className="">
+          {isUserLoggedIn && (
+              <Nav.Link href="/profile" className={classes["top-10"]}>
+                Welcome, {parsedLoggedUser.name}!
+              </Nav.Link>
+            )}
+            
             {isUserLoggedIn && (
               <Nav.Link>
                 <button onClick={props.onLogout}>

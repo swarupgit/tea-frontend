@@ -1,10 +1,22 @@
 
-  .actions {
-    text-align: right;
+ 
+  .m-t-1 {
+    margin-top: 1rem;
+  }
+  .p-1 {
+    padding: 1rem;
   }
 
-  .right {
-    float: right;
+  .small-button {
+    font: inherit;
+    cursor: pointer;
+    background-color: transparent;
+    border: 1px solid #f54905;
+    padding: 0.1rem 1rem;
+    border-radius: 25px;
+    margin-left: 1rem;
+    background-color: #f54905;
+    color: white;
   }
   
   .actions button {
@@ -33,6 +45,10 @@
     color: white;
   }
 
+  .actions .default_button {
+    border-color: #8a2b06;
+  }
+
   .heading {
     font-size: 1.3rem;
     font-weight: 600;
@@ -52,14 +68,6 @@
     margin: 1rem 0;
     display: flex;
     align-items: stretch;
-    flex-direction: column;
-  }
-
-  .row-direction {
-    flex-direction: row;
-  }
-
-  .column-direction {
     flex-direction: column;
   }
   
@@ -94,12 +102,48 @@
     background: #fbdada;
   }
 
+  .bump {
+    animation: bump 300ms ease-in-out;
+  }
+
+  .divider {
+    border-bottom: 1px solid;
+    width: 100%;
+  }
+  
+  
+  @keyframes bump {
+    0% {
+      transform: scale(1);
+    }
+    10% {
+      transform: scale(0.9);
+    }
+    30% {
+      transform: scale(1.1);
+    }
+    50% {
+      transform: scale(1.15);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  .control.valid input {
+    border-color: green;
+  }
+
   .error {
     color: red;
   }
   
   .actions {
     text-align: center;
+  }
+
+  .actions-right {
+    text-align: right;
   }
   
   @media (min-width: 768px) {
@@ -122,7 +166,6 @@
 
 .login-for {
   display: inline !important;
-  margin-right: 5px;
 }
 .cursor {
   cursor: pointer;

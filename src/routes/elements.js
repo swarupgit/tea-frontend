@@ -23,3 +23,6 @@ export const CustomerList = Loadable(
 export const NewCustomer = Loadable(
   lazy(() => import("../pages/NewCustomer"))
 );
+export const Profile = Loadable(
+  lazy(() => import("../pages/Profile"))
+);

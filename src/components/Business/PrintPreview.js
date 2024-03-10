@@ -7,10 +7,31 @@ import Table from "../UI/Table";
 import { validateEmail } from "customize-string-operations";
 import { addCustomer, fetchCustomer } from "../../store/quote-slice";
 import moment from "moment";
+import { ToWords } from "to-words";
 
 const PrintPreview = (props) => {
   const dispatch = useDispatch();
   useEffect(() => {}, []);
+  const [seller, setSeller] = useState(0);
+  const toWords = new ToWords({
+    localeCode: 'en-IN',
+    converterOptions: {
+      currency: true,
+      ignoreDecimal: false,
+      ignoreZeroCurrency: false,
+      doNotAddOnly: false,
+      currencyOptions: { // can be used to override defaults for the selected locale
+        name: 'Rupee',
+        plural: 'Rupees',
+        symbol: '₹',
+        fractionalUnit: {
+          name: 'Paisa',
+          plural: 'Paise',
+          symbol: '',
+        },
+      }
+    }
+  });
 
   const printPage = () => {
     var disp_setting = "toolbar=yes,location=no,";
@@ -48,6 +69,12 @@ const PrintPreview = (props) => {
       .print-value {
         font-weight: 600;
         font-family: Arial, Helvetica, sans-serif;
+        text-align: left;
+      }
+      .print-value-center {
+        font-weight: 600;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
       }
       .bar {
         border-bottom: 1px solid #000;
@@ -85,13 +112,70 @@ const PrintPreview = (props) => {
     </div>
   );
 
+  const sellerChangeHandler = (e) => {
+    setSeller(e.target.value);
+  };
+
   const printPreviewModalContent = (
     <Fragment>
       <h3 className={classes.heading}>Invoice Details</h3>
+      <div className={`${classes["control"]} ${classes["w-50"]}`}>
+        <label className={`${classes["control-label"]}`}>Select Seller</label>
+        <select onChange={sellerChangeHandler}>
+          <option value={0}>{process.env.REACT_APP_COMPANY_NAME0}</option>
+          <option value={1}>{process.env.REACT_APP_COMPANY_NAME1}</option>
+        </select>
+      </div>
       <div className={`card ${classes["m-t-1"]}`} id="printable">
         {/* <div className="card-header">Customer Details</div> */}
         <div className={` ${classes["p-1"]} card-body`}>
-          <div className="row">
+          <div className={`${classes["bar-after"]} bar-after row`}>
+            <div className={`col-12 ${classes["down-space"]} down-space`}>
+              <div className={`text-center print-value-center`}>Bill Copy</div>
+            </div>
+            <div className={`col-6 ${classes["down-space"]} down-space`}>
+              <label className={`${classes["control-label"]}`}>
+                Seller Name
+              </label>
+              <div className="print-value">
+                {process.env[`REACT_APP_COMPANY_NAME${seller}`]}
+              </div>
+            </div>
+            <div className={`col-6 ${classes["down-space"]} down-space`}>
+              <label className={`${classes["control-label"]}`}>
+                Seller Company
+              </label>
+              <div className="print-value">
+                {process.env[`REACT_APP_COMPANY_SUPP${seller}`]}
+              </div>
+            </div>
+            <div className={`col-6 ${classes["down-space"]} down-space`}>
+              <label className={`${classes["control-label"]}`}>
+                Seller Address
+              </label>
+              <div className="print-value">
+                {process.env[`REACT_APP_COMPANY_ADDRESS${seller}`]}
+              </div>
+            </div>
+            <div className={`col-6 ${classes["down-space"]} down-space`}>
+              <label className={`${classes["control-label"]}`}>
+                Seller Email
+              </label>
+              <div className="print-value">
+                {process.env[`REACT_APP_COMPANY_EMAIL${seller}`]}
+              </div>
+            </div>
+            <div className={`col-6 ${classes["down-space"]} down-space`}>
+              <label className={`${classes["control-label"]}`}>
+                Seller Mobile
+              </label>
+              <div className="print-value">
+                {process.env[`REACT_APP_COMPANY_MOBILE${seller}`]}
+              </div>
+            </div>
+          </div>
+          <div className={`${classes.bar} bar`}></div>
+          <div className={`${classes["bar-after"]} bar-after row`}>
             <div className={`col-6 ${classes["down-space"]} down-space`}>
               <label className={`${classes["control-label"]}`}>
                 Invoice Number
@@ -168,6 +252,11 @@ const PrintPreview = (props) => {
               <div className={`col-6 ${classes["down-space"]} down-space`}>
                 <label className={`${classes["control-label"]}`}>Note</label>
                 <div className="print-value">{props.previewData.note}</div>
+              </div>
+            )}
+            {(props.previewData.creditAmount || props.previewData.debitAmount) && (
+              <div className={`col-12 ${classes["down-space"]} down-space`}>
+                <div className="print-value">Amount in Words: {toWords.convert(props.previewData.creditAmount || props.previewData.debitAmount)}.</div>
               </div>
             )}
           </div>

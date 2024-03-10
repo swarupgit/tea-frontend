@@ -17,6 +17,7 @@ import { cartActions } from "../../store/cart-slice";
 import { Outlet } from "react-router-dom";
 import NewQuote from "../Business/NewQuote";
 import { fetchCustomer } from "../../store/quote-slice";
+import Register from "../Auth/Register";
 
 function BlankPageLayout() {
   const [cartIsShown, setCartIsShown] = useState(false);
@@ -24,6 +25,8 @@ function BlankPageLayout() {
   const isUserLoggedIn = useSelector(isLoggedIn);
   const userType = useSelector(type);
   const dispatch = useDispatch();
+  const [newUser, setNewUser] = useState(false);
+  const [logging, setLogging] = useState(true);
 
   const showCartHandler = () => {
     setCartIsShown(true);
@@ -64,6 +67,9 @@ function BlankPageLayout() {
         authActions.setCanManage(localStorage.getItem("canManage"))
       );
     }
+    if (localStorage.getItem("loggedUser")) {
+      await dispatch(authActions.setLoggedUser(localStorage.getItem("loggedUser")));
+    }
     const isAuthentic = await dispatch(
       await isAuthorize({ token: localToken?.accessToken })
     );
@@ -80,6 +86,7 @@ function BlankPageLayout() {
     localStorage.removeItem("loggedIn");
     localStorage.removeItem("token");
     localStorage.removeItem("type");
+    localStorage.removeItem("loggedUser");
     localStorage.clear();
   };
 
@@ -92,6 +99,14 @@ function BlankPageLayout() {
     await removeLocalStorage();
     await resetRedux();
   };
+  const createUser = () => {
+    setNewUser(true);
+    setLogging(false);
+  };
+  const cancelRegister = () => {
+    setNewUser(false);
+    setLogging(true);
+  }
   return (
     <CartProvider>
       {cartIsShown && isUserLoggedIn && <Cart onClose={hideCartHandler} />}
@@ -103,7 +118,8 @@ function BlankPageLayout() {
         onLogout={logoutHandler}
       />
       <main>
-        {!isUserLoggedIn && <Login onClose={logoutHandler} />}
+        {!isUserLoggedIn && logging && !newUser && <Login onClose={logoutHandler} createUser={createUser}/>}
+        {newUser && !logging && <Register onCancel={cancelRegister}/>}
         <ToastContainer
           position="top-center"
           autoClose={2000}

@@ -52,6 +52,9 @@ function Dashboard() {
     if (localStorage.getItem("type")) {
       await dispatch(authActions.setType(localStorage.getItem("type")));
     }
+    if (localStorage.getItem("loggedUser")) {
+      await dispatch(authActions.setLoggedUser(localStorage.getItem("loggedUser")));
+    }
     if (localStorage.getItem("ci")) {
       await dispatch(cartActions.reloadCart());
     }
@@ -70,6 +73,7 @@ function Dashboard() {
     localStorage.removeItem("loggedIn");
     localStorage.removeItem("token");
     localStorage.removeItem("type");
+    localStorage.removeItem("loggedUser");
     localStorage.clear();
   };
 
