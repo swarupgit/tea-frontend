@@ -39,7 +39,17 @@ const BusinessStatistic = () => {
       return (new Date(item.transactionDate)).getDate() === (new Date()).getDate() && item.creditAmount > 0 ? carry + parseFloat(item.creditAmount) : carry + 0;
     }, 0)
     .toFixed(2);
-  let top = {
+  let top1 = {
+    _id: '',
+    name: '',
+    count: 0
+  };
+  let top2 = {
+    _id: '',
+    name: '',
+    count: 0
+  };
+  let top3 = {
     _id: '',
     name: '',
     count: 0
@@ -49,7 +59,7 @@ const BusinessStatistic = () => {
     orders.forEach((d, i) => {
       if(d.customerId._id in maxCustomer) {
         maxCustomer[d.customerId._id]['count'] = ++maxCustomer[d.customerId._id]['count'];
-        maxCustomer[d.customerId._id]['leaf'] = parseFloat(parseFloat(maxCustomer[d.customerId._id]['leaf']) + d.netLeafKgs ? parseFloat(d.netLeafKgs) : 0);
+        maxCustomer[d.customerId._id]['leaf'] = parseFloat(parseFloat(maxCustomer[d.customerId._id]['leaf']) + (d.netLeafKgs ? parseFloat(d.netLeafKgs) : 0));
       }
       else {
         maxCustomer[d.customerId._id] = {
@@ -61,12 +71,36 @@ const BusinessStatistic = () => {
       }
     });
     maxCustomer = Object.values(maxCustomer);
-    top = {...maxCustomer[0]};
-    maxCustomer.forEach((c, i) => {
-      if(parseFloat(c.leaf) > parseFloat(top.leaf)) {
-        top = {...c};
-      }
-    });
+    console.log(maxCustomer, 'customer after')
+    if(maxCustomer.length) {
+      top1 = {...maxCustomer[0]};
+      maxCustomer.forEach((c, i) => {
+        if(parseFloat(c.leaf) > parseFloat(top1.leaf)) {
+          top1 = {...c};
+        }
+      });
+    }
+    maxCustomer = maxCustomer.filter(i => i._id !== top1._id);
+    console.log(maxCustomer, 'customer after1')
+    if(maxCustomer.length) {
+      top2 = {...maxCustomer[0]};
+      maxCustomer.forEach((c, i) => {
+        if(parseFloat(c.leaf) > parseFloat(top2.leaf)) {
+          top2 = {...c};
+        }
+      });
+    }
+    maxCustomer = maxCustomer.filter(i => i._id !== top2._id);
+    console.log(maxCustomer, 'customer after2')
+    if(maxCustomer.length) {
+      top3 = {...maxCustomer[0]};
+      maxCustomer.forEach((c, i) => {
+        if(parseFloat(c.leaf) > parseFloat(top3.leaf)) {
+          top3 = {...c};
+        }
+      });
+    }
+    console.log(maxCustomer, 'customer after3')
   }
   return (
     <Fragment>
@@ -240,7 +274,9 @@ const BusinessStatistic = () => {
                   <h5 className="card-title text-uppercase mb-0">
                     Top Customer
                   </h5>
-                  <span className="h2 font-weight-bold mb-0">{top?.name || ''}</span>
+                  {top1._id && <p className="h2 font-weight-bold mb-0">1. {top1?.name || ''}</p>}
+                  {top2._id && <p className="h2 font-weight-bold mb-0">2. {top2?.name || ''}</p>}
+                  {top3._id && <p className="h2 font-weight-bold mb-0">3. {top3?.name || ''}</p>}
                 </div>
                 <div className="col-auto">
                   <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
