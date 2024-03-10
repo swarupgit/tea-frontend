@@ -3,9 +3,11 @@ import { Card } from "react-bootstrap";
 import classes from "./BusinessStatistic.module.css";
 import { allOrders } from "../../store/order-slice";
 import { useSelector } from "react-redux";
+import { allCustomers } from "../../store/quote-slice";
 
 const BusinessStatistic = () => {  
   const orders = useSelector(allOrders);
+  const customers = useSelector(allCustomers);
   const totalNetLeaf = orders.reduce((carry, item) => {
     return item.netLeafKgs ? carry + parseFloat(item.netLeafKgs) : carry + 0;
   }, 0).toFixed(2);
@@ -267,16 +269,14 @@ const BusinessStatistic = () => {
           </div>
         </div>
         <div className="col-xl-3 col-lg-6 mb-2">
-          <div className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`} style={{ backgroundColor: "#08A04B"}}>
+          <div className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`} style={{ backgroundColor: "#30DA4F"}}>
             <div className="card-body">
               <div className="row">
                 <div className="col">
                   <h5 className="card-title text-uppercase mb-0">
-                    Top Customer
+                    Total Customer
                   </h5>
-                  {top1._id && <p className="h2 font-weight-bold mb-0">1. {top1?.name || ''}</p>}
-                  {top2._id && <p className="h2 font-weight-bold mb-0">2. {top2?.name || ''}</p>}
-                  {top3._id && <p className="h2 font-weight-bold mb-0">3. {top3?.name || ''}</p>}
+                  <span className="h2 font-weight-bold mb-0">{customers.length || 0}</span>
                 </div>
                 <div className="col-auto">
                   <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
@@ -291,6 +291,32 @@ const BusinessStatistic = () => {
             </div>
           </div>
         </div>
+        <div className="offset-xl-3 col-xl-6 col-lg-6 mb-2">
+          <div className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`} style={{ backgroundColor: "#08A04B"}}>
+            <div className="card-body">
+              <div className="row">
+                <div className="col">
+                  <h5 className="card-title text-uppercase mb-0">
+                    Top Customers <span className={classes.smallText}>(Upto 3)</span>
+                  </h5>
+                  {top1._id && <p className="h4 font-weight-bold mb-0">1. {top1?.name || ''} <span className={classes.smallText}>({top1?.leaf || 0}KG)</span></p>}
+                  {top2._id && <p className="h4 font-weight-bold mb-0">2. {top2?.name || ''} <span className={classes.smallText}>({top2?.leaf || 0}KG)</span></p>}
+                  {top3._id && <p className="h4 font-weight-bold mb-0">3. {top3?.name || ''} <span className={classes.smallText}>({top3?.leaf || 0}KG)</span></p>}
+                </div>
+                <div className="col-auto">
+                  <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                    <i className="fas fa-users"></i>
+                  </div>
+                </div>
+              </div>
+              <p
+                className={`mt-3 mb-0 text-muted text-sm ${classes.cardSpace}`}
+              >
+              </p>
+            </div>
+          </div>
+        </div>
+        
       </div>
     </Fragment>
   );

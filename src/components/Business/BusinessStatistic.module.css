@@ -6,7 +6,7 @@
 .cardRow {
     position: absolute;
     width: 100%;
-    top: 30vh;
+    top: 15vh;
     padding: 1rem;
     animation: meals-appear 1s ease-out forwards;
 }
@@ -14,6 +14,10 @@
 .cardSpace {
     display: flex;
     justify-content: space-between;
+}
+
+.smallText {
+    font-size: 12px;
 }
 
 @media (max-width: 1024px) {
