@@ -36,6 +36,13 @@ const initState = {
       filter: true,
     },
     {
+      field: "clNo",
+      header: "CL No/RST No",
+      width: "5%",
+      sortable: false,
+      filter: true,
+    },
+    {
       field: "netLeafKgs",
       header: "Net Leaf Kgs",
       width: "10%",
@@ -43,8 +50,8 @@ const initState = {
     },
     {
       field: "qlty",
-      header: "Qlty(%)",
-      width: "10%",
+      header: "Qlty/Fine Leaf(%)",
+      width: "5%",
       sortable: false,
     },
     {
