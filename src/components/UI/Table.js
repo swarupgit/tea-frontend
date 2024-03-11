@@ -382,11 +382,7 @@ export default function Table(props) {
           {
             title: "VCH No",
             dataKey: "vchNo",
-          },
-          {
-            title: "CL No",
-            dataKey: "clNo",
-          },
+          }
         ];
         const pdfColumn = [...exportColumns];
         pdfColumn.splice(6, 0, ...otherCol);
@@ -516,9 +512,9 @@ export default function Table(props) {
           "Invoice No": "",
           Type: "",
           "Customer Name": "",
-          "Vch no": "",
-          "Cl no": "",
-          "Qlty(%)": "",
+          "Vch No": "",
+          "Cl No/RST No": "",
+          "Qlty/Fine Leaf(%)": "",
           "Net Leaf KGS": "",
           "Rate/KG": "",
           "Debit Amount": "",
@@ -531,8 +527,8 @@ export default function Table(props) {
           Type: "",
           "Customer Name": "",
           "Vch no": "",
-          "Cl no": "Total",
-          "Qlty(%)": "",
+          "Cl No/RST No": "Total",
+          "Qlty/Fine Leaf(%)": "",
           "Net Leaf KGS": totalNetLeaf,
           "Rate/KG": "",
           "Debit Amount": totalDebitAmount,
@@ -547,8 +543,8 @@ export default function Table(props) {
           Type: d.type,
           "Customer Name": d.customerId.name,
           "Vch no": d.vchNo,
-          "Cl no": d.clNo,
-          "Qlty(%)": d.qlty,
+          "Cl No/RST No": d.clNo,
+          "Qlty/Fine Leaf(%)": d.qlty,
           "Net Leaf KGS": d.netLeafKgs,
           "Rate/KG": d.rateKg > 0 ? parseFloat(d.rateKg).toFixed(2) : d.rateKg,
           "Debit Amount":
