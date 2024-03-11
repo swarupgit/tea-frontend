@@ -434,7 +434,7 @@ export default function Table(props) {
             vchNo: "",
             clNo: "",
             qlty: "",
-            note: `Outstanding: ${totalCreditAmount - totalDebitAmount}`,
+            note: `Outstanding: ${(totalCreditAmount - totalDebitAmount).toFixed(2)}`,
           },
         ];
 
@@ -533,7 +533,7 @@ export default function Table(props) {
           "Rate/KG": "",
           "Debit Amount": totalDebitAmount,
           "Credit Amount": totalCreditAmount,
-          Note: `Outstanding: ${totalCreditAmount - totalDebitAmount}`,
+          Note: `Outstanding: ${(totalCreditAmount - totalDebitAmount).toFixed(2)}`,
         },
       ];
       const xlData = props.data
