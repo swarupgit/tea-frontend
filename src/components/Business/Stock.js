@@ -305,7 +305,7 @@ const Stock = (props) => {
           />
         </div>
         <div className={`${classes.control}`}>
-          <label htmlFor="clNo">CL No</label>
+          <label htmlFor="clNo">CL No/RST No</label>
           <input
             type="text"
             id="clNo"
@@ -325,7 +325,7 @@ const Stock = (props) => {
           />
         </div>
         <div className={`${classes.control}`}>
-          <label htmlFor="qlty">Qlty (%)</label>
+          <label htmlFor="qlty">Qlty/Fine Leaf (%)</label>
           <input
             type="text"
             id="qlty"
