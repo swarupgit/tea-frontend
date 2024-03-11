@@ -254,7 +254,7 @@ const Stock = (props) => {
               : ""
           } ${nameIsValid === false ? classes.bump : ""}`}
         >
-          <label htmlFor="clNo">CL No</label>
+          <label htmlFor="clNo">CL No/RST No</label>
           <input
             type="text"
             id="clNo"
@@ -292,7 +292,7 @@ const Stock = (props) => {
               : ""
           } ${unitIsValid === false ? classes.bump : ""}`}
         >
-          <label htmlFor="qlty">Qlty</label>
+          <label htmlFor="qlty">Qlty/Fine Leaf(%)</label>
           <input
             type="text"
             id="qlty"
