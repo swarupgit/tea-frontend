@@ -40,7 +40,7 @@ const initState = {
       header: "CL No/RST No",
       width: "5%",
       sortable: false,
-      filter: true,
+      filter: false,
     },
     {
       field: "netLeafKgs",
