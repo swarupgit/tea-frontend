@@ -196,13 +196,13 @@ const PrintPreview = (props) => {
             </div>
             {props.previewData.qlty && (
               <div className={`col-6 ${classes["down-space"]} down-space`}>
-                <label className={`${classes["control-label"]}`}>Qlty(%)</label>
+                <label className={`${classes["control-label"]}`}>Qlty/Fine Leaf(%)</label>
                 <div className="print-value">{props.previewData.qlty}</div>
               </div>
             )}
             {props.previewData.clNo && (
               <div className={`col-6 ${classes["down-space"]} down-space`}>
-                <label className={`${classes["control-label"]}`}>CL No</label>
+                <label className={`${classes["control-label"]}`}>CL No/RST No</label>
                 <div className="print-value">{props.previewData.clNo}</div>
               </div>
             )}
