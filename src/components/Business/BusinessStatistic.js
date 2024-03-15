@@ -269,7 +269,7 @@ const BusinessStatistic = () => {
           </div>
         </div>
         <div className="col-xl-3 col-lg-6 mb-2">
-          <div className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`} style={{ backgroundColor: "#30DA4F"}}>
+          <div className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`} style={{ backgroundColor: "#b3004d"}}>
             <div className="card-body">
               <div className="row">
                 <div className="col">
@@ -292,7 +292,7 @@ const BusinessStatistic = () => {
           </div>
         </div>
         <div className="offset-xl-3 col-xl-6 col-lg-6 mb-2">
-          <div className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`} style={{ backgroundColor: "#08A04B"}}>
+          <div className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`} style={{ backgroundColor: "#FF0054"}}>
             <div className="card-body">
               <div className="row">
                 <div className="col">
