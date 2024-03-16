@@ -196,10 +196,10 @@ export default function Order() {
           const doc = new jsPDF.default({ orientation: "l" }, 0, 0);
           doc.setFont('Times New Roman');
           doc.text("STATEMENT", 135, 10);
-          doc.text(`PARTY NAME: ${selectedCustomer?.name}`, 97, 20);
-          doc.text(`PERIOD: FROM ${moment(fromDate).format("YYYY-MM-DD")} TO ${moment(toDate).format(
+          doc.text(`Party Name: ${selectedCustomer?.name}`, 100, 20);
+          doc.text(`Period: ${moment(fromDate).format("YYYY-MM-DD")} To ${moment(toDate).format(
             "YYYY-MM-DD"
-          )}`, 100, 30);
+          )}`, 107, 30);
           let position = 0;
           const outstanding = totalCreditAmount > totalDebitAmount ? (totalCreditAmount - totalDebitAmount).toFixed(2) : 0;
           const otherCol = [
