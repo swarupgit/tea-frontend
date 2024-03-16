@@ -281,9 +281,9 @@ export default function Order() {
               }
             }
           );
-          doc.text(`Total Credit Amount in Words: ${toWords.convert(totalCreditAmount)}.`, 10, position);
+          doc.text(`Total Credit Amount in Words: ${totalCreditAmount > 0 ? toWords.convert(totalCreditAmount) : 'No Credit Amount'}.`, 10, position);
           position = position + 10;
-          doc.text(`Total Debit Amount in Words: ${toWords.convert(totalDebitAmount)}.`, 10, position);
+          doc.text(`Total Debit Amount in Words: ${totalDebitAmount > 0 ? toWords.convert(totalDebitAmount): 'No Debit Amount'}.`, 10, position);
           position = position + 10;
           doc.text(`Total Outstanding Amount in Words: ${outstanding > 0 ? toWords.convert(outstanding) : 'No Outstanding Amount'}.`, 10, position);
           doc.save(`${title || "invoices"}.pdf`);
