@@ -282,11 +282,16 @@ export default function Order() {
             }
           );
           doc.setFont('Paradroid', 'normal', 'bold');
-          doc.text(`Total Credit Amount in Words: ${totalCreditAmount > 0 ? toWords.convert(totalCreditAmount) : 'No Credit Amount'}.`, 10, position);
+          doc.setTextColor('#3B82F6');
+          const textBreak = 280;
+          const tct = doc.splitTextToSize(`Total Credit Amount in Words: ${totalCreditAmount > 0 ? toWords.convert(totalCreditAmount) : 'No Credit Amount'}.`, textBreak);
+          doc.text(10, position, tct);
           position = getPosition(position, doc);
-          doc.text(`Total Debit Amount in Words: ${totalDebitAmount > 0 ? toWords.convert(totalDebitAmount): 'No Debit Amount'}.`, 10, position);
+          const tdt = doc.splitTextToSize(`Total Debit Amount in Words: ${totalDebitAmount > 0 ? toWords.convert(totalDebitAmount): 'No Debit Amount'}.`, textBreak);
+          doc.text(10, position, tdt);
           position = getPosition(position, doc);
-          doc.text(`Total Outstanding Amount in Words: ${outstanding > 0 ? toWords.convert(outstanding) : 'No Outstanding Amount'}.`, 10, position);
+          const tot = doc.splitTextToSize(`Total Outstanding Amount in Words: ${outstanding > 0 ? toWords.convert(outstanding) : 'No Outstanding Amount'}.`, textBreak);
+          doc.text(10, position, tot);
           //doc height is 205
           doc.save(`${title || "invoices"}.pdf`);
         });
