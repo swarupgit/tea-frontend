@@ -197,8 +197,8 @@ export default function Order() {
           doc.setFont('Times New Roman');
           doc.text("STATEMENT", 135, 10);
           doc.text(`Party Name: ${selectedCustomer?.name}`, 100, 20);
-          doc.text(`Period: ${moment(fromDate).format("YYYY-MM-DD")} To ${moment(toDate).format(
-            "YYYY-MM-DD"
+          doc.text(`Period: ${moment(fromDate).format("DD-MM-YYYY")} To ${moment(toDate).format(
+            "DD-MM-YYYY"
           )}`, 107, 30);
           let position = 0;
           const outstanding = totalCreditAmount > totalDebitAmount ? (totalCreditAmount - totalDebitAmount).toFixed(2) : 0;
@@ -282,14 +282,23 @@ export default function Order() {
             }
           );
           doc.text(`Total Credit Amount in Words: ${totalCreditAmount > 0 ? toWords.convert(totalCreditAmount) : 'No Credit Amount'}.`, 10, position);
-          position = position + 10;
+          position = getPosition(position, doc);
           doc.text(`Total Debit Amount in Words: ${totalDebitAmount > 0 ? toWords.convert(totalDebitAmount): 'No Debit Amount'}.`, 10, position);
-          position = position + 10;
+          position = getPosition(position, doc);
           doc.text(`Total Outstanding Amount in Words: ${outstanding > 0 ? toWords.convert(outstanding) : 'No Outstanding Amount'}.`, 10, position);
           doc.save(`${title || "invoices"}.pdf`);
         });
       });
   };
+
+  const getPosition = (pos, doc) => {
+    if(pos > 190) {
+      doc.addPage();
+      return 20;
+    }
+    pos += 10;
+    return pos;
+  }
 
   const closePreviewBill = () => {
     setPreviewBill(false);
