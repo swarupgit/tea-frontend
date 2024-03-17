@@ -281,11 +281,13 @@ export default function Order() {
               }
             }
           );
+          doc.setFont('Paradroid', 'normal', 'bold');
           doc.text(`Total Credit Amount in Words: ${totalCreditAmount > 0 ? toWords.convert(totalCreditAmount) : 'No Credit Amount'}.`, 10, position);
           position = getPosition(position, doc);
           doc.text(`Total Debit Amount in Words: ${totalDebitAmount > 0 ? toWords.convert(totalDebitAmount): 'No Debit Amount'}.`, 10, position);
           position = getPosition(position, doc);
           doc.text(`Total Outstanding Amount in Words: ${outstanding > 0 ? toWords.convert(outstanding) : 'No Outstanding Amount'}.`, 10, position);
+          //doc height is 205
           doc.save(`${title || "invoices"}.pdf`);
         });
       });
