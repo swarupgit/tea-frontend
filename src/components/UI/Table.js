@@ -385,7 +385,7 @@ export default function Table(props) {
           }
         ];
         const pdfColumn = [...exportColumns];
-        pdfColumn.splice(6, 0, ...otherCol);
+        pdfColumn.splice(2, 0, ...otherCol);
         const totalNetLeaf = props.data
           .reduce((carry, item) => {
             return item.netLeafKgs
@@ -510,11 +510,11 @@ export default function Table(props) {
         {
           Date: "",
           "Invoice No": "",
-          Type: "",
-          "Customer Name": "",
           "Vch No": "",
-          "Cl No/RST No": "",
+          "Customer Name": "",
+          Type: "",
           "Qlty/Fine Leaf(%)": "",
+          "Cl No/RST No": "",
           "Net Leaf KGS": "",
           "Rate/KG": "",
           "Debit Amount": "",
@@ -524,12 +524,12 @@ export default function Table(props) {
         {
           Date: "",
           "Invoice No": "",
-          Type: "",
-          "Customer Name": "",
           "Vch No": "",
+          "Customer Name": "",
+          Type: "",
           "Cl No/RST No": "Total",
-          "Qlty/Fine Leaf(%)": "",
           "Net Leaf KGS": totalNetLeaf,
+          "Qlty/Fine Leaf(%)": "",
           "Rate/KG": "",
           "Debit Amount": totalDebitAmount,
           "Credit Amount": totalCreditAmount,
@@ -540,12 +540,12 @@ export default function Table(props) {
         .map((d) => ({
           Date: moment(d.transactionDate).utc().format("DD/MM/YYYY"),
           "Invoice No": d.invoiceNo,
-          Type: d.type,
-          "Customer Name": d.customerId.name,
           "Vch No": d.vchNo,
+          "Customer Name": d.customerId.name,
+          Type: d.type,
           "Cl No/RST No": d.clNo,
-          "Qlty/Fine Leaf(%)": d.qlty,
           "Net Leaf KGS": d.netLeafKgs,
+          "Qlty/Fine Leaf(%)": d.qlty,
           "Rate/KG": d.rateKg > 0 ? parseFloat(d.rateKg).toFixed(2) : d.rateKg,
           "Debit Amount":
             d.debitAmount > 0

@@ -209,7 +209,7 @@ export default function Order() {
             }
           ];
           const pdfColumn = [...exportColumns];
-          pdfColumn.splice(6, 0, ...otherCol);
+          pdfColumn.splice(2, 0, ...otherCol);
           const final = [
             {
               transactionDate: "",
