@@ -267,7 +267,7 @@ const BillPreview = (props) => {
                 </tr>
                 <tr>
                   <th colSpan={5}></th>
-                  <th colSpan={2}>For .......................</th>
+                  <th colSpan={2}>For: {process.env[`REACT_APP_COMPANY_NAME${seller}`]}</th>
                 </tr>
               </tbody>
             </table>
