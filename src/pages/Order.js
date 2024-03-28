@@ -208,8 +208,8 @@ export default function Order() {
               dataKey: "vchNo",
             }
           ];
-          const pdfColumn = [...exportColumns];
-          pdfColumn.splice(2, 0, ...otherCol);
+          const pdfColumn = [...exportColumns].filter((i) => (i.title !== 'Invoice No')).filter((i) => (i.title !== 'Customer Name'));
+          pdfColumn.splice(1, 0, ...otherCol);
           const final = [
             {
               transactionDate: "",
@@ -231,11 +231,11 @@ export default function Order() {
               type: "",
               netLeafKgs: totalNetLeaf,
               rateKg: "",
-              "customerId.name": "Total",
+              "customerId.name": "",
               debitAmount: totalDebitAmount,
               creditAmount: totalCreditAmount,
               vchNo: "",
-              clNo: "",
+              clNo: "Total",
               qlty: "",
               note: `Outstanding: ${outstanding}`,
             },
