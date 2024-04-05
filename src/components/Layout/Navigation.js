@@ -83,7 +83,7 @@ const Navigation = (props) => {
               // </NavDropdown>
             )}
             {isUserLoggedIn && userCanManage && (
-              <Nav.Link href="/payments" className={classes["top-10"]}>
+              <Nav.Link href="/payments" className={classes["top-10"]} style={{ color: "#F00080"}}>
                 In-Out Payment
               </Nav.Link>
             )}
