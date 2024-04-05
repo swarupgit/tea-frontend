@@ -16,6 +16,7 @@ export const Page404 = Loadable(lazy(() => import("../pages/Page404")));
 export const Sell = Loadable(lazy(() => import("../pages/Sell")));
 
 export const Orders = Loadable(lazy(() => import("../pages/Order")));
+export const Payments = Loadable(lazy(() => import("../pages/Payment")));
 export const Stocks = Loadable(lazy(() => import("../pages/Stock")));
 export const CustomerList = Loadable(
   lazy(() => import("../pages/CustomerList"))

@@ -6,6 +6,7 @@ import orderSlice from "./order-slice";
 import quoteSlice from "./quote-slice";
 import stockSlice from "./stock-slice";
 import toastSlice from "./toast-slice";
+import paymentSlice from "./payment-slice";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     order: orderSlice.reducer,
     quote: quoteSlice.reducer,
     stock: stockSlice.reducer,
+    payment: paymentSlice.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false,

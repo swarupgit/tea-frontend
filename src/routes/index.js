@@ -9,6 +9,7 @@ import {
   Sell,
   Stocks,
   Profile,
+  Payments,
 } from "./elements";
 import Authenticate from "../components/middleware/Authenticate";
 import CompactLayout from "../components/compact/CompactLayout";
@@ -50,6 +51,14 @@ export default function Router() {
           children: [
             { path: "/customer/Lists", element: <CustomerList /> },
             // { path: "/customer/new", element: <NewCustomer /> },
+          ],
+        },
+        {
+          path: "/payments",
+          element: <BlankPageLayout />,
+          children: [
+            { path: "/payments", element: <Payments /> },
+            // { path: "/business/stocks", element: <Stocks /> },
           ],
         },
         {

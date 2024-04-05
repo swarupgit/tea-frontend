@@ -82,6 +82,11 @@ const Navigation = (props) => {
               //   </NavDropdown.Item> */}
               // </NavDropdown>
             )}
+            {isUserLoggedIn && userCanManage && (
+              <Nav.Link href="/payments" className={classes["top-10"]}>
+                In-Out Payment
+              </Nav.Link>
+            )}
             {isUserLoggedIn && hasItems && (
               <Nav.Link>
                 <HeaderCartButton onClick={props.onShowCart} />
