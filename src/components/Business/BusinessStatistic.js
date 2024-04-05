@@ -364,7 +364,7 @@ const BusinessStatistic = () => {
         <div className="col-xl-6 col-lg-6 mb-2">
           <div
             className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`}
-            style={{ backgroundColor: "#8F408B" }}
+            style={{ backgroundColor: "#00FFFF" }}
           >
             <div className="card-body">
               <div className="row">

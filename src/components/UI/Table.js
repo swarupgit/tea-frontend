@@ -470,6 +470,7 @@ export default function Table(props) {
           ],
           [...pdfData, ...final],
           {
+            theme: "grid",
             didParseCell: function (cell, data) {
               if (cell.table.body.length === pdfData.length + 2) {
                 // cell.styles.fontStyle = "bold";

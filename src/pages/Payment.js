@@ -1,6 +1,5 @@
 import { Fragment } from "react";
 import React, { useState, useEffect } from "react";
-import Table from "../components/UI/Table";
 import { useDispatch, useSelector } from "react-redux";
 import {
   allPayments,
@@ -14,11 +13,9 @@ import {
 import PrintPreview from "../components/Business/PrintPreview";
 import { Calendar } from "primereact/calendar";
 import { Dropdown } from "primereact/dropdown";
-import { allCustomers } from "../store/quote-slice";
 import moment from "moment";
 import BillPreview from "../components/Business/BillPreview";
 import { isLoggedIn } from "../store/auth-slice";
-import Stock from "../components/Business/Stock";
 import { Button } from "primereact/button";
 import { ToWords } from "to-words";
 import NewPayment from "../components/Payment/NewPayment";
@@ -218,20 +215,12 @@ export default function Payment() {
           totalCreditAmount - totalDebitAmount
         ).toFixed(2);
         // console.log(customers, selectedCustomer?.outStandingAmount, parseFloat(selectedCustomer?.outStandingAmount), parseFloat(currentOutstanding))
-        const otherCol = [
-          {
-            title: "VCH No",
-            dataKey: "vchNo",
-          },
-        ];
         const pdfColumn = [...exportColumns]
-          .filter((i) => i.title !== "Invoice No")
-          .filter((i) => i.title !== "Name");
-        pdfColumn.splice(1, 0, ...otherCol);
+          .filter((i) => i.dataKey !== "payNo")
         const final = [
           {
             transactionDate: "",
-            invoiceNo: "",
+            payNo: "",
             payType: "",
             payBy: "",
             name: "",
@@ -241,7 +230,7 @@ export default function Payment() {
           },
           {
             transactionDate: "",
-            invoiceNo: "",
+            payNo: "",
             payType: "",
             payBy: "",
             name: "",
@@ -256,7 +245,7 @@ export default function Payment() {
             transactionDate: moment(d.transactionDate)
               .utc()
               .format("DD/MM/YYYY"),
-            invoiceNo: d.invoiceNo,
+            payNo: d.invoiceNo,
             payType: d.payType,
             payBy: d.payBy,
             name: d.name,
