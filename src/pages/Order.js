@@ -195,13 +195,15 @@ export default function Order() {
           .filter((i) => i.dataKey);
           const doc = new jsPDF.default({ orientation: "l" }, 0, 0);
           doc.setFont('Times New Roman');
-          doc.text("STATEMENT", 135, 10);
-          doc.text(`Party Name: ${selectedCustomer?.name}`, 100, 20);
+          doc.text("STATEMENT", 150, 10, {align:"center"});
+          doc.text(`Party Name: ${selectedCustomer?.name}`, 150, 20, {align: "center"});
           doc.text(`Period: ${moment(fromDate).format("DD-MM-YYYY")} To ${moment(toDate).format(
             "DD-MM-YYYY"
-          )}`, 107, 30);
+          )}`, 150, 30, {align:"center"});
           let position = 0;
-          const outstanding = totalCreditAmount > totalDebitAmount ? (totalCreditAmount - totalDebitAmount).toFixed(2) : 0;
+          const currentOutstanding = totalCreditAmount > totalDebitAmount ? (totalCreditAmount - totalDebitAmount).toFixed(2) : 0;
+          const outstanding = parseFloat(selectedCustomer?.outStandingAmount).toFixed(2); 
+          // console.log(customers, selectedCustomer?.outStandingAmount, parseFloat(selectedCustomer?.outStandingAmount), parseFloat(currentOutstanding))
           const otherCol = [
             {
               title: "VCH No",
@@ -237,7 +239,7 @@ export default function Order() {
               vchNo: "",
               clNo: "Total",
               qlty: "",
-              note: `Outstanding: ${outstanding}`,
+              note: `Closing: ${outstanding}`,
             },
           ];
   
@@ -274,6 +276,7 @@ export default function Order() {
             [...pdfData, ...final],
             {
               margin: { top: 35 },
+              theme: 'grid',
               didDrawPage: (d) =>  {
                 console.log('possition',d.cursor.y)
                 position = d.cursor.y + 7;
@@ -297,6 +300,104 @@ export default function Order() {
         });
       });
   };
+
+  const paymentHistory = () => {
+    import("jspdf").then((jsPDF) => {
+      import("jspdf-autotable").then(() => {
+        const exportColumns = [
+          {
+            field: "transactionDate",
+            header: "Date",
+          },
+          {
+            field: "debitAmount",
+            header: "Debit Amount",
+          },
+          {
+            field: "creditAmount",
+            header: "Credit Amount",
+          },
+        ]
+        .map((col) => ({
+          title: col.header,
+          dataKey: col.field,
+        }))
+        .filter((i) => i.dataKey);
+        const doc = new jsPDF.default({ orientation: "l" }, 0, 0);
+        doc.setFont('Times New Roman');
+        doc.text("PAYMENT HISTORY", 150, 10, {align:"center"});
+        doc.text(`Party Name: ${selectedCustomer?.name}`, 150, 20, {align: "center"});
+        doc.text(`Period: ${moment(fromDate).format("DD-MM-YYYY")} To ${moment(toDate).format(
+          "DD-MM-YYYY"
+        )}`, 150, 30, {align:"center"});
+        let position = 0;
+        const currentOutstanding = totalCreditAmount > totalDebitAmount ? (totalCreditAmount - totalDebitAmount).toFixed(2) : 0;
+        const outstanding = parseFloat(selectedCustomer?.outStandingAmount).toFixed(2); 
+        const pdfColumn = [...exportColumns];
+        const final = [
+          {
+            transactionDate: "",
+            debitAmount: "",
+            creditAmount: "",
+            note: ``,
+          },
+          {
+            transactionDate: "",
+            debitAmount: totalDebitAmount,
+            creditAmount: totalCreditAmount,
+            note: `Closing: ${outstanding}`,
+          },
+        ];
+
+        const pdfData = orders
+          .map((d) => ({
+            transactionDate: moment(d.transactionDate).utc().format("DD/MM/YYYY"),
+            debitAmount:
+              d.debitAmount > 0
+                ? parseFloat(d.debitAmount).toFixed(2)
+                : d.debitAmount,
+            creditAmount:
+              d.creditAmount > 0
+                ? parseFloat(d.creditAmount).toFixed(2)
+                : d.creditAmount,
+            note: d.note,
+          }))
+          .filter((i) => i);
+        doc.autoTable(
+          [
+            ...pdfColumn,
+            {
+              title: "Note",
+              dataKey: "note",
+            },
+          ],
+          [...pdfData, ...final],
+          {
+            margin: { top: 35 },
+            theme: 'grid',
+            didDrawPage: (d) =>  {
+              console.log('possition',d.cursor.y)
+              position = d.cursor.y + 7;
+              d.settings.margin.top = 10;
+            }
+          }
+        );
+        doc.setFont('Paradroid', 'normal', 'bold');
+        doc.setTextColor('#3B82F6');
+        const textBreak = 280;
+        const tct = doc.splitTextToSize(`Total Credit Amount in Words: ${totalCreditAmount > 0 ? toWords.convert(totalCreditAmount) : 'No Credit Amount'}.`, textBreak);
+        doc.text(10, position, tct);
+        position = getPosition(position, doc);
+        const tdt = doc.splitTextToSize(`Total Debit Amount in Words: ${totalDebitAmount > 0 ? toWords.convert(totalDebitAmount): 'No Debit Amount'}.`, textBreak);
+        doc.text(10, position, tdt);
+        position = getPosition(position, doc);
+        const tot = doc.splitTextToSize(`Total Outstanding Amount in Words: ${outstanding > 0 ? toWords.convert(outstanding) : 'No Outstanding Amount'}.`, textBreak);
+        doc.text(10, position, tot);
+        //doc height is 205
+        doc.save(`${title || "invoices"}.pdf`);
+      });
+    });
+};
 
   const getPosition = (pos, doc) => {
     if(pos > 190) {
@@ -381,6 +482,15 @@ export default function Order() {
               label="Statement"
               className="p-button p-button-rounded ms-2"
               onClick={pdfStatement}
+              severity="help"
+            />
+          )}
+          {isStatement && (
+            <Button
+              type="button"
+              label="Payment History"
+              className="p-button p-button-rounded ms-2"
+              onClick={paymentHistory}
               severity="help"
             />
           )}

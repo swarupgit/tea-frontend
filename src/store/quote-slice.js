@@ -111,6 +111,7 @@ const quoteSlice = createSlice({
               email: data[key].email,
               mobile: data[key].mobile,
               address: data[key].address,
+              outStandingAmount: data[key].outStandingAmount,
               createdAt: data[key].createdAt,
             });
           }
