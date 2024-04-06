@@ -191,6 +191,10 @@ const PrintPreview = (props) => {
               </div>
             </div>
             <div className={`col-6 ${classes["down-space"]} down-space`}>
+              <label className={`${classes["control-label"]}`}>Opening Balance</label>
+              <div className="print-value">{props.previewData.openingBalance}</div>
+            </div>
+            <div className={`col-6 ${classes["down-space"]} down-space`}>
               <label className={`${classes["control-label"]}`}>Name</label>
               <div className="print-value">{props.previewData.name}</div>
             </div>
@@ -202,6 +206,12 @@ const PrintPreview = (props) => {
               <div className={`col-6 ${classes["down-space"]} down-space`}>
                 <label className={`${classes["control-label"]}`}>Payment Mode</label>
                 <div className="print-value">{props.previewData.payBy}</div>
+              </div>
+            )}
+            {props.previewData.payNote && (
+              <div className={`col-6 ${classes["down-space"]} down-space`}>
+                <label className={`${classes["control-label"]}`}>Payment Note</label>
+                <div className="print-value">{props.previewData.payNote}</div>
               </div>
             )}
             {props.previewData.debitAmount && (
