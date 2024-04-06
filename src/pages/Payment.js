@@ -10,7 +10,7 @@ import {
   persons,
   putPayment,
 } from "../store/payment-slice";
-import PrintPreview from "../components/Business/PrintPreview";
+import PrintPreview from "../components/Payment/PrintPreview";
 import { Calendar } from "primereact/calendar";
 import { Dropdown } from "primereact/dropdown";
 import moment from "moment";
@@ -192,17 +192,17 @@ export default function Payment() {
             dataKey: col.field,
           }))
           .filter((i) => i.dataKey);
-        const doc = new jsPDF.default({ orientation: "l" }, 0, 0);
+        const doc = new jsPDF.default({ orientation: "p" }, 0, 0);
         doc.setFont("Times New Roman");
-        doc.text("STATEMENT", 150, 10, { align: "center" });
-        doc.text(`Party Name: ${selectedCustomer}`, 150, 20, {
+        doc.text("STATEMENT", 105, 10, { align: "center" });
+        doc.text(`Party Name: ${selectedCustomer}`, 105, 20, {
           align: "center",
         });
         doc.text(
           `Period: ${moment(fromDate).format("DD-MM-YYYY")} To ${moment(
             toDate
           ).format("DD-MM-YYYY")}`,
-          150,
+          105,
           30,
           { align: "center" }
         );
@@ -224,6 +224,7 @@ export default function Payment() {
             payType: "",
             payBy: "",
             name: "",
+            openingBalance: "",
             debitAmount: "",
             creditAmount: "",
             note: ``,
@@ -234,6 +235,7 @@ export default function Payment() {
             payType: "",
             payBy: "",
             name: "",
+            openingBalance: "",
             debitAmount: totalDebitAmount,
             creditAmount: totalCreditAmount,
             note: `Closing: ${outstanding}`,
@@ -245,10 +247,11 @@ export default function Payment() {
             transactionDate: moment(d.transactionDate)
               .utc()
               .format("DD/MM/YYYY"),
-            payNo: d.invoiceNo,
+            payNo: d.payNo,
             payType: d.payType,
-            payBy: d.payBy,
+            payBy: `${d.payBy}\n\nNote: ${d.payNote}`,
             name: d.name,
+            openingBalance: d.openingBalance,
             debitAmount:
               d.debitAmount > 0
                 ? parseFloat(d.debitAmount).toFixed(2)
@@ -286,27 +289,27 @@ export default function Payment() {
           }.`,
           textBreak
         );
-        doc.text(10, position, tct);
-        position = getPosition(position, doc);
-        const tdt = doc.splitTextToSize(
-          `Total Debit Amount in Words: ${
-            totalDebitAmount > 0
-              ? toWords.convert(totalDebitAmount)
-              : "No Debit Amount"
-          }.`,
-          textBreak
-        );
-        doc.text(10, position, tdt);
-        position = getPosition(position, doc);
-        const tot = doc.splitTextToSize(
-          `Total Outstanding Amount in Words: ${
-            outstanding > 0
-              ? toWords.convert(outstanding)
-              : "No Outstanding Amount"
-          }.`,
-          textBreak
-        );
-        doc.text(10, position, tot);
+        // doc.text(10, position, tct);
+        // position = getPosition(position, doc);
+        // const tdt = doc.splitTextToSize(
+        //   `Total Debit Amount in Words: ${
+        //     totalDebitAmount > 0
+        //       ? toWords.convert(totalDebitAmount)
+        //       : "No Debit Amount"
+        //   }.`,
+        //   textBreak
+        // );
+        // doc.text(10, position, tdt);
+        // position = getPosition(position, doc);
+        // const tot = doc.splitTextToSize(
+        //   `Total Outstanding Amount in Words: ${
+        //     outstanding > 0
+        //       ? toWords.convert(outstanding)
+        //       : "No Outstanding Amount"
+        //   }.`,
+        //   textBreak
+        // );
+        // doc.text(10, position, tot);
         //doc height is 205
         doc.save(`${title || "invoices"}.pdf`);
       });
@@ -441,7 +444,7 @@ export default function Payment() {
           <PrintPreview onClose={closePreview} previewData={previewData} />
         )}
         {dateSelect}
-        {previewBill && (
+        {/* {previewBill && (
           <BillPreview
             onClose={closePreviewBill}
             billingData={billingPaymentItems}
@@ -450,7 +453,7 @@ export default function Payment() {
             }
             title={title}
           />
-        )}
+        )} */}
         <TablePayment
           data={orders}
           columns={columns}
@@ -477,7 +480,6 @@ export default function Payment() {
         <div className="text-white">
           <table style={{ width: "100%" }}>
             <tr>
-              <td>Total Net Leaf: {totalNetLeaf}</td>
               <td>Total Debit Amount: {totalDebitAmount}</td>
               <td>Total Credit Amount: {totalCreditAmount}</td>
             </tr>

@@ -62,28 +62,9 @@ const Navigation = (props) => {
               <Nav.Link href="/customer/lists" className={classes["top-10"]}>
                 Customers
               </Nav.Link>
-              // <NavDropdown
-              //   title="Customers"
-              //   id="basic-nav-dropdown"
-              //   className={`${classes["nav-dropdown"]} ${classes["top-10"]}`}
-              // >
-              //   <NavDropdown.Item
-              //     href="/customer/lists"
-              //     className={classes["action"]}
-              //   >
-              //     List
-              //   </NavDropdown.Item>
-              //   {/* <NavDropdown.Divider /> */}
-              //   {/* <NavDropdown.Item
-              //     href="/customer/new"
-              //     className={classes["action"]}
-              //   >
-              //     New
-              //   </NavDropdown.Item> */}
-              // </NavDropdown>
             )}
             {isUserLoggedIn && userCanManage && (
-              <Nav.Link href="/payments" className={classes["top-10"]} style={{ color: "#F00080"}}>
+              <Nav.Link href="/payments" className={classes["top-10"]}>
                 In-Out Payment
               </Nav.Link>
             )}

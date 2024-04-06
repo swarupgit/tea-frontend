@@ -29,48 +29,54 @@ const BusinessStatistic = () => {
     .toFixed(2);
   const monthNetLeaf = orders
     .reduce((carry, item) => {
-      return new Date(item.transactionDate).getMonth() ===
-        new Date().getMonth() && item.netLeafKgs
+      const tmonth = `${new Date(item.transactionDate).getMonth()}${new Date(item.transactionDate).getFullYear()}`
+      const month = `${new Date().getMonth()}${new Date().getFullYear()}`
+      return (tmonth ===
+        month) && item.netLeafKgs
         ? carry + parseFloat(item.netLeafKgs)
         : carry + 0;
     }, 0)
     .toFixed(2);
   const monthDebitAmount = orders
     .reduce((carry, item) => {
-      return new Date(item.transactionDate).getMonth() ===
-        new Date().getMonth() && item.debitAmount > 0
+      const tmonth = `${new Date(item.transactionDate).getMonth()}${new Date(item.transactionDate).getFullYear()}`
+      const month = `${new Date().getMonth()}${new Date().getFullYear()}`
+      return (tmonth ===
+        month) && (item.debitAmount > 0)
         ? carry + parseFloat(item.debitAmount)
         : carry + 0;
     }, 0)
     .toFixed(2);
   const monthCreditAmount = orders
     .reduce((carry, item) => {
-      return new Date(item.transactionDate).getMonth() ===
-        new Date().getMonth() && item.creditAmount > 0
+      const tmonth = `${new Date(item.transactionDate).getMonth()}${new Date(item.transactionDate).getFullYear()}`
+      const month = `${new Date().getMonth()}${new Date().getFullYear()}`
+      return (tmonth ===
+        month) && (item.creditAmount > 0)
         ? carry + parseFloat(item.creditAmount)
         : carry + 0;
     }, 0)
     .toFixed(2);
   const todayNetLeaf = orders
     .reduce((carry, item) => {
-      return new Date(item.transactionDate).getDate() ===
-        new Date().getDate() && item.netLeafKgs
+      return ((new Date(item.transactionDate).getTime() ===
+        new Date().getTime()) && item.netLeafKgs)
         ? carry + parseFloat(item.netLeafKgs)
         : carry + 0;
     }, 0)
     .toFixed(2);
   const todayDebitAmount = orders
     .reduce((carry, item) => {
-      return new Date(item.transactionDate).getDate() ===
-        new Date().getDate() && item.debitAmount > 0
+      return (new Date(item.transactionDate).getTime() ===
+        new Date().getTime()) && (item.debitAmount > 0)
         ? carry + parseFloat(item.debitAmount)
         : carry + 0;
     }, 0)
     .toFixed(2);
   const todayCreditAmount = orders
     .reduce((carry, item) => {
-      return new Date(item.transactionDate).getDate() ===
-        new Date().getDate() && item.creditAmount > 0
+      return (new Date(item.transactionDate).getTime() ===
+        new Date().getTime()) && (item.creditAmount > 0)
         ? carry + parseFloat(item.creditAmount)
         : carry + 0;
     }, 0)

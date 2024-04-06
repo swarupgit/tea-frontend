@@ -18,6 +18,10 @@ const NewPayment = (props) => {
     {
       name: 'Debit',
       value: 'Debit'
+    },
+    {
+      name: 'Opening Balance',
+      value: 'Opening Balance'
     }
   ];
   const pmode = [
@@ -38,8 +42,8 @@ const NewPayment = (props) => {
       value: 'Online'
     },
     {
-      name: 'Individual',
-      value: 'Individual'
+      name: 'Net Banking',
+      value: 'Net Banking'
     }
   ];
   const [invoiceNoIsValid, setInvoiceNoIsValid] = useState(
@@ -54,6 +58,12 @@ const NewPayment = (props) => {
   );
   const [enteredName, setEnteredName] = useState(
     props.editingItem && props.editingItem._id ? props.editingItem.name : ""
+  );
+  const [enteredOpeningBal, setEnteredOpeningBal] = useState(
+    props.editingItem && props.editingItem._id ? props.editingItem.openingBalance : ""
+  );
+  const [enteredPaymentNote, setEnteredPaymentNote] = useState(
+    props.editingItem && props.editingItem._id ? props.editingItem.payNote : ""
   );
   const [enteredPrice, setEnteredPrice] = useState(
     props.editingItem && props.editingItem._id
@@ -84,6 +94,7 @@ const NewPayment = (props) => {
   const [selectedDate, setSelectedDate] = useState(
     props.editingItem && props.editingItem._id ? new Date(props.editingItem.transactionDate) : new Date()
   );
+  const [openNote, setOpenNote] = useState(props.editingItem && props.editingItem._id && props.editingItem && props.editingItem.payBy ? true : false);
 
   const dispatch = useDispatch();
 
@@ -92,7 +103,7 @@ const NewPayment = (props) => {
     setInvoiceNoIsValid(event.target.value.length > 3);
 
     setFormIsValid(
-      event.target.value.length > 3 && enteredName.length > 3 && enteredPrice > 0
+      event.target.value.length > 3 && enteredName.length > 3
     );
   };
 
@@ -100,7 +111,7 @@ const NewPayment = (props) => {
     // setSelectedCustomer(e.value);
     setEnteredName(e.target.value);
     setFormIsValid(
-      e.target.value && enteredInvoiceNo.length > 3 && enteredPrice > 0
+      e.target.value && enteredInvoiceNo.length > 3
     );
   };
 
@@ -109,15 +120,21 @@ const NewPayment = (props) => {
   };
   const paymentModeChangeHandler = (event) => {
     setSelectedPaymentMode(event.value);
+    setOpenNote(false);
+    if(event.value) {
+      setOpenNote(true);
+    }
   };
   const priceChangeHandler = (event) => {
     setEnteredPrice(event.target.value);
+  };
 
-    setFormIsValid(
-      enteredInvoiceNo.length > 3 &&
-        enteredName.length > 3 &&
-        event.target.value > 0
-    );
+  const openingBalChangeHandler = (event) => {
+    setEnteredOpeningBal(event.target.value);
+  };
+
+  const paymentNoteChangeHandler = (event) => {
+    setEnteredPaymentNote(event.target.value);
   };
 
   const noteChangeHandler = (event) => {
@@ -130,7 +147,9 @@ const NewPayment = (props) => {
     payNo: enteredInvoiceNo,
     payType: selectedPaymentType,
     name: enteredName,
+    openingBalance: enteredOpeningBal,
     payBy: selectedPaymentMode,
+    payNote: enteredPaymentNote,
     creditAmount:
     selectedPaymentType === "Credit"
         ? parseFloat(enteredPrice)
@@ -230,6 +249,15 @@ const NewPayment = (props) => {
           />
         </div>
         <div className={`${classes.control}`}>
+          <label htmlFor="customer">Opening Balance</label>
+          <input
+            type="text"
+            id="customer"
+            value={enteredOpeningBal}
+            onChange={openingBalChangeHandler}
+          />
+        </div>
+        <div className={`${classes.control}`}>
           <label htmlFor="customer">Name</label>
           <input
             type="text"
@@ -271,6 +299,15 @@ const NewPayment = (props) => {
             style={{ flex: "3.1 1" }}
           />
         </div>
+        {openNote && <div className={`${classes.control}`}>
+          <label htmlFor="customer">Payment Note</label>
+          <input
+            type="text"
+            id="customer"
+            value={enteredPaymentNote}
+            onChange={paymentNoteChangeHandler}
+          />
+        </div>}
         <div className={`${classes.control}`}>
           <label htmlFor="price">Amount</label>
           <input

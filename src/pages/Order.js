@@ -193,13 +193,13 @@ export default function Order() {
             dataKey: col.field,
           }))
           .filter((i) => i.dataKey);
-          const doc = new jsPDF.default({ orientation: "l" }, 0, 0);
+          const doc = new jsPDF.default({ orientation: "p" }, 0, 0);
           doc.setFont('Times New Roman');
-          doc.text("STATEMENT", 150, 10, {align:"center"});
-          doc.text(`Party Name: ${selectedCustomer?.name}`, 150, 20, {align: "center"});
+          doc.text("STATEMENT", 105, 10, {align:"center"});
+          doc.text(`Party Name: ${selectedCustomer?.name}`, 105, 20, {align: "center"});
           doc.text(`Period: ${moment(fromDate).format("DD-MM-YYYY")} To ${moment(toDate).format(
             "DD-MM-YYYY"
-          )}`, 150, 30, {align:"center"});
+          )}`, 105, 30, {align:"center"});
           let position = 0;
           const outstanding = totalCreditAmount > totalDebitAmount ? (totalCreditAmount - totalDebitAmount).toFixed(2) : 0;
           // const outstanding = parseFloat(selectedCustomer?.outStandingAmount).toFixed(2); 
@@ -284,17 +284,17 @@ export default function Order() {
               }
             }
           );
-          doc.setFont('Paradroid', 'normal', 'bold');
-          doc.setTextColor('#3B82F6');
-          const textBreak = 280;
-          const tct = doc.splitTextToSize(`Total Credit Amount in Words: ${totalCreditAmount > 0 ? toWords.convert(totalCreditAmount) : 'No Credit Amount'}.`, textBreak);
-          doc.text(10, position, tct);
-          position = getPosition(position, doc);
-          const tdt = doc.splitTextToSize(`Total Debit Amount in Words: ${totalDebitAmount > 0 ? toWords.convert(totalDebitAmount): 'No Debit Amount'}.`, textBreak);
-          doc.text(10, position, tdt);
-          position = getPosition(position, doc);
-          const tot = doc.splitTextToSize(`Total Outstanding Amount in Words: ${outstanding > 0 ? toWords.convert(outstanding) : 'No Outstanding Amount'}.`, textBreak);
-          doc.text(10, position, tot);
+          // doc.setFont('Paradroid', 'normal', 'bold');
+          // doc.setTextColor('#3B82F6');
+          // const textBreak = 280;
+          // const tct = doc.splitTextToSize(`Total Credit Amount in Words: ${totalCreditAmount > 0 ? toWords.convert(totalCreditAmount) : 'No Credit Amount'}.`, textBreak);
+          // doc.text(10, position, tct);
+          // position = getPosition(position, doc);
+          // const tdt = doc.splitTextToSize(`Total Debit Amount in Words: ${totalDebitAmount > 0 ? toWords.convert(totalDebitAmount): 'No Debit Amount'}.`, textBreak);
+          // doc.text(10, position, tdt);
+          // position = getPosition(position, doc);
+          // const tot = doc.splitTextToSize(`Total Outstanding Amount in Words: ${outstanding > 0 ? toWords.convert(outstanding) : 'No Outstanding Amount'}.`, textBreak);
+          // doc.text(10, position, tot);
           //doc height is 205
           doc.save(`${title || "invoices"}.pdf`);
         });
@@ -310,6 +310,14 @@ export default function Order() {
             header: "Date",
           },
           {
+            field: "type",
+            header: "Type",
+          },
+          {
+            field: "clNo",
+            header: "CL No/RST No",
+          },
+          {
             field: "debitAmount",
             header: "Debit Amount",
           },
@@ -323,13 +331,13 @@ export default function Order() {
           dataKey: col.field,
         }))
         .filter((i) => i.dataKey);
-        const doc = new jsPDF.default({ orientation: "l" }, 0, 0);
+        const doc = new jsPDF.default({ orientation: "p" }, 0, 0);
         doc.setFont('Times New Roman');
-        doc.text("PAYMENT HISTORY", 150, 10, {align:"center"});
-        doc.text(`Party Name: ${selectedCustomer?.name}`, 150, 20, {align: "center"});
+        doc.text("PAYMENT HISTORY", 105, 10, {align:"center"});
+        doc.text(`Party Name: ${selectedCustomer?.name}`, 105, 20, {align: "center"});
         doc.text(`Period: ${moment(fromDate).format("DD-MM-YYYY")} To ${moment(toDate).format(
           "DD-MM-YYYY"
-        )}`, 150, 30, {align:"center"});
+        )}`, 105, 30, {align:"center"});
         let position = 0;
         const outstanding = totalCreditAmount > totalDebitAmount ? (totalCreditAmount - totalDebitAmount).toFixed(2) : 0;
         // const outstanding = parseFloat(selectedCustomer?.outStandingAmount).toFixed(2); 
@@ -337,12 +345,16 @@ export default function Order() {
         const final = [
           {
             transactionDate: "",
+            type: "",
+            clNo: "",
             debitAmount: "",
             creditAmount: "",
             note: ``,
           },
           {
             transactionDate: "",
+            type: "",
+            clNo: "",
             debitAmount: totalDebitAmount,
             creditAmount: totalCreditAmount,
             note: `Closing: ${outstanding}`,
@@ -352,6 +364,8 @@ export default function Order() {
         const pdfData = orders
           .map((d) => ({
             transactionDate: moment(d.transactionDate).utc().format("DD/MM/YYYY"),
+            type: d.type,
+            clNo: d.clNo,
             debitAmount:
               d.debitAmount > 0
                 ? parseFloat(d.debitAmount).toFixed(2)
@@ -382,17 +396,17 @@ export default function Order() {
             }
           }
         );
-        doc.setFont('Paradroid', 'normal', 'bold');
-        doc.setTextColor('#3B82F6');
-        const textBreak = 280;
-        const tct = doc.splitTextToSize(`Total Credit Amount in Words: ${totalCreditAmount > 0 ? toWords.convert(totalCreditAmount) : 'No Credit Amount'}.`, textBreak);
-        doc.text(10, position, tct);
-        position = getPosition(position, doc);
-        const tdt = doc.splitTextToSize(`Total Debit Amount in Words: ${totalDebitAmount > 0 ? toWords.convert(totalDebitAmount): 'No Debit Amount'}.`, textBreak);
-        doc.text(10, position, tdt);
-        position = getPosition(position, doc);
-        const tot = doc.splitTextToSize(`Total Outstanding Amount in Words: ${outstanding > 0 ? toWords.convert(outstanding) : 'No Outstanding Amount'}.`, textBreak);
-        doc.text(10, position, tot);
+        // doc.setFont('Paradroid', 'normal', 'bold');
+        // doc.setTextColor('#3B82F6');
+        // const textBreak = 280;
+        // const tct = doc.splitTextToSize(`Total Credit Amount in Words: ${totalCreditAmount > 0 ? toWords.convert(totalCreditAmount) : 'No Credit Amount'}.`, textBreak);
+        // doc.text(10, position, tct);
+        // position = getPosition(position, doc);
+        // const tdt = doc.splitTextToSize(`Total Debit Amount in Words: ${totalDebitAmount > 0 ? toWords.convert(totalDebitAmount): 'No Debit Amount'}.`, textBreak);
+        // doc.text(10, position, tdt);
+        // position = getPosition(position, doc);
+        // const tot = doc.splitTextToSize(`Total Outstanding Amount in Words: ${outstanding > 0 ? toWords.convert(outstanding) : 'No Outstanding Amount'}.`, textBreak);
+        // doc.text(10, position, tot);
         //doc height is 205
         doc.save(`${title || "invoices"}.pdf`);
       });

@@ -105,6 +105,15 @@ export default function TablePayment(props) {
     );
   };
 
+  const withNote = (rowData, options) => {
+    return (
+      <div>
+        {rowData.payBy}
+        {rowData.payNote && <div style={{ fontSize: "10pt", marginTop: "10px"}}>Note: {rowData.payNote}</div>}
+      </div>
+    );
+  }
+
   const mailSend = (rowData, options) => {
     return (
       <a href={`mailto:${rowData.email}`}>
@@ -358,6 +367,16 @@ export default function TablePayment(props) {
           body={formattedDate}
         />
       );
+    } else if (col.note) {
+      return (
+        <Column
+          key={col.field}
+          field={col.field}
+          header={col.header}
+          style={{ width: `${col.width}` }}
+          body={withNote}
+        />
+      );
     } else {
       return (
         <Column
@@ -400,6 +419,7 @@ export default function TablePayment(props) {
             payType: "",
             payBy: "",
             name: "",
+            openingBalance: "",
             debitAmount: "",
             creditAmount: "",
             note: ``,
@@ -410,6 +430,7 @@ export default function TablePayment(props) {
             payType: "",
             payBy: '',
             name: "Total",
+            openingBalance: "",
             debitAmount: totalDebitAmount,
             creditAmount: totalCreditAmount,
             note: `Outstanding: ${(totalCreditAmount - totalDebitAmount).toFixed(2)}`,
@@ -421,8 +442,9 @@ export default function TablePayment(props) {
             transactionDate: moment(d.transactionDate).utc().format("DD/MM/YYYY"),
             payNo: d.payNo,
             payType: d.payType,
-            payBy: d.payBy,
+            payBy: `${d.payBy}\n\nNote: ${d.payNote}`,
             name: d.name,
+            openingBalance: d.openingBalance,
             debitAmount:
               d.debitAmount > 0
                 ? parseFloat(d.debitAmount).toFixed(2)
@@ -476,7 +498,7 @@ export default function TablePayment(props) {
           "Ref No": "",
           "Name": "",
           "Payment Type": "",
-          "Mode": "",
+          "Payment Mode": "",
           "Debit Amount": "",
           "Credit Amount": "",
           Note: ``,
@@ -486,7 +508,7 @@ export default function TablePayment(props) {
           "Ref No": "",
           "Name": "Total",
           "Payment Type": "",
-          "Mode": "",
+          "Payment Mode": "",
           "Debit Amount": totalDebitAmount,
           "Credit Amount": totalCreditAmount,
           Note: `Outstanding: ${(totalCreditAmount - totalDebitAmount).toFixed(2)}`,
@@ -498,7 +520,7 @@ export default function TablePayment(props) {
           "Ref No": d.payNo,
           "Name": d.name,
           "Payment Type": d.payType,
-          "Mode": d.payBy,
+          "Payment Mode": `${d.payBy}\n\nNote: ${d.payNote}`,
           "Debit Amount":
             d.debitAmount > 0
               ? parseFloat(d.debitAmount).toFixed(2)

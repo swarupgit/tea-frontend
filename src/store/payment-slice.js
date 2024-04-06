@@ -22,6 +22,13 @@ const initState = {
       filter: true,
     },
     {
+      field: "openingBalance",
+      header: "Opening Balance",
+      width: "10%",
+      sortable: true,
+      filter: true,
+    },
+    {
       field: "name",
       header: "Name",
       width: "10%",
@@ -37,27 +44,28 @@ const initState = {
     },
     {
       field: "payBy",
-      header: "Mode",
+      header: "Payment Mode",
       width: "10%",
       sortable: false,
       filter: false,
+      note: true,
     },
     {
       field: "debitAmount",
       header: "Debit Amount",
-      width: "15%",
+      width: "10%",
       sortable: true,
     },
     {
       field: "creditAmount",
       header: "Credit Amount",
-      width: "15%",
+      width: "10%",
       sortable: true,
     },
     {
       field: "note",
       header: "Note",
-      width: "15%",
+      width: "10%",
       sortable: false,
     },
     {
