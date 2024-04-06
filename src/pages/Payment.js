@@ -249,7 +249,7 @@ export default function Payment() {
               .format("DD/MM/YYYY"),
             payNo: d.payNo,
             payType: d.payType,
-            payBy: `${d.payBy}\n\nNote: ${d.payNote}`,
+            payBy: `${d.payBy}\n${d.payNote}`,
             name: d.name,
             openingBalance: d.openingBalance,
             debitAmount:

@@ -145,11 +145,11 @@ const NewPayment = (props) => {
   // const item = useSelector((state) => findItem(state, {}));
   const payload = {
     payNo: enteredInvoiceNo,
-    payType: selectedPaymentType,
-    name: enteredName,
-    openingBalance: enteredOpeningBal,
-    payBy: selectedPaymentMode,
-    payNote: enteredPaymentNote,
+    payType: selectedPaymentType || '',
+    name: enteredName || '',
+    openingBalance: enteredOpeningBal || 0,
+    payBy: selectedPaymentMode || '',
+    payNote: enteredPaymentNote || '',
     creditAmount:
     selectedPaymentType === "Credit"
         ? parseFloat(enteredPrice)
@@ -158,7 +158,7 @@ const NewPayment = (props) => {
     selectedPaymentType === "Debit"
         ? parseFloat(enteredPrice)
         : 0,
-    note: enteredNote,
+    note: enteredNote || '',
     transactionDate: moment(selectedDate).format('YYYY-MM-DD'),
   };
 

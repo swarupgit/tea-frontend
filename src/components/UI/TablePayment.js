@@ -109,7 +109,7 @@ export default function TablePayment(props) {
     return (
       <div>
         {rowData.payBy}
-        {rowData.payNote && <div style={{ fontSize: "10pt", marginTop: "10px"}}>Note: {rowData.payNote}</div>}
+        {rowData.payNote && <div style={{ fontSize: "10pt"}}>{rowData.payNote}</div>}
       </div>
     );
   }
@@ -442,7 +442,7 @@ export default function TablePayment(props) {
             transactionDate: moment(d.transactionDate).utc().format("DD/MM/YYYY"),
             payNo: d.payNo,
             payType: d.payType,
-            payBy: `${d.payBy}\n\nNote: ${d.payNote}`,
+            payBy: `${d.payBy}\n${d.payNote}`,
             name: d.name,
             openingBalance: d.openingBalance,
             debitAmount:
@@ -520,7 +520,7 @@ export default function TablePayment(props) {
           "Ref No": d.payNo,
           "Name": d.name,
           "Payment Type": d.payType,
-          "Payment Mode": `${d.payBy}\n\nNote: ${d.payNote}`,
+          "Payment Mode": `${d.payBy}\n${d.payNote}`,
           "Debit Amount":
             d.debitAmount > 0
               ? parseFloat(d.debitAmount).toFixed(2)
