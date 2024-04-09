@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { canManage, isLoggedIn, loggedInUser } from "../../store/auth-slice";
@@ -16,6 +16,23 @@ const Navigation = (props) => {
   const userCanManage = useSelector(canManage);
   const loggedUser = useSelector(loggedInUser);
   const parsedLoggedUser = typeof loggedUser === 'string' ? JSON.parse(loggedUser) : loggedUser;
+
+  const setActive = (page = '') => {
+    localStorage.setItem('active', page);
+  }
+
+  useEffect(() => {
+    console.log(window.location.pathname);
+    if(!localStorage.getItem('active')) {
+      switch(window.location.pathname) {
+        case '/payments': setActive('iop');break;
+        case '/customer/lists': setActive('customer');break;
+        case '/business/orders': setActive('sales');break;
+        case '/profile': setActive('profile');break;
+        default: setActive('');break;
+      }
+    }
+  }, [])
 
   return (
     <Navbar fixed="top" variant="dark" expand="lg" className={classes.navbar}>
@@ -36,7 +53,7 @@ const Navigation = (props) => {
               </Nav.Link>
             )}
             {isUserLoggedIn && userCanManage && (
-              <Nav.Link href="/business/orders" className={classes["top-10"]}>
+              <Nav.Link href="/business/orders" className={`${classes["top-10"]} ${localStorage.getItem('active') === 'sales' ? classes["active"] : ''}`} onClick={() => setActive('sales')}>
                 Sales
               </Nav.Link>
               // <NavDropdown
@@ -59,12 +76,12 @@ const Navigation = (props) => {
               // </NavDropdown>
             )}
             {isUserLoggedIn && userCanManage && (
-              <Nav.Link href="/customer/lists" className={classes["top-10"]}>
+              <Nav.Link href="/customer/lists" className={`${classes["top-10"]} ${localStorage.getItem('active') === 'customer' ? classes["active"] : ''}`} onClick={() => setActive('customer')}>
                 Customers
               </Nav.Link>
             )}
             {isUserLoggedIn && userCanManage && (
-              <Nav.Link href="/payments" className={classes["top-10"]}>
+              <Nav.Link href="/payments" className={`${classes["top-10"]} ${localStorage.getItem('active') === 'iop' ? classes["active"] : ''}`} onClick={() => setActive('iop')}>
                 In-Out Payment
               </Nav.Link>
             )}
@@ -76,7 +93,7 @@ const Navigation = (props) => {
           </Nav>
           <Nav className="">
           {isUserLoggedIn && (
-              <Nav.Link href="/profile" className={classes["top-10"]}>
+              <Nav.Link href="/profile" className={`${classes["top-10"]} ${localStorage.getItem('active') === 'profile' ? classes["active"] : ''}`} onClick={() => setActive('profile')}>
                 Welcome, {parsedLoggedUser.name}!
               </Nav.Link>
             )}

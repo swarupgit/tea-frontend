@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { Card } from "react-bootstrap";
 import classes from "./BusinessStatistic.module.css";
 import { allOrders } from "../../store/order-slice";
@@ -59,24 +59,30 @@ const BusinessStatistic = () => {
     .toFixed(2);
   const todayNetLeaf = orders
     .reduce((carry, item) => {
-      return ((new Date(item.transactionDate).getTime() ===
-        new Date().getTime()) && item.netLeafKgs)
+      const tday = `${new Date(item.transactionDate).getDate()}${new Date(item.transactionDate).getMonth()}${new Date(item.transactionDate).getFullYear()}`
+      const day = `${new Date().getDate()}${new Date().getMonth()}${new Date().getFullYear()}`
+      return ((tday ===
+        day) && item.netLeafKgs)
         ? carry + parseFloat(item.netLeafKgs)
         : carry + 0;
     }, 0)
     .toFixed(2);
   const todayDebitAmount = orders
     .reduce((carry, item) => {
-      return (new Date(item.transactionDate).getTime() ===
-        new Date().getTime()) && (item.debitAmount > 0)
+      const tday = `${new Date(item.transactionDate).getDate()}${new Date(item.transactionDate).getMonth()}${new Date(item.transactionDate).getFullYear()}`
+      const day = `${new Date().getDate()}${new Date().getMonth()}${new Date().getFullYear()}`
+      return (tday ===
+        day) && (item.debitAmount > 0)
         ? carry + parseFloat(item.debitAmount)
         : carry + 0;
     }, 0)
     .toFixed(2);
   const todayCreditAmount = orders
     .reduce((carry, item) => {
-      return (new Date(item.transactionDate).getTime() ===
-        new Date().getTime()) && (item.creditAmount > 0)
+      const tday = `${new Date(item.transactionDate).getDate()}${new Date(item.transactionDate).getMonth()}${new Date(item.transactionDate).getFullYear()}`
+      const day = `${new Date().getDate()}${new Date().getMonth()}${new Date().getFullYear()}`
+      return (tday ===
+        day) && (item.creditAmount > 0)
         ? carry + parseFloat(item.creditAmount)
         : carry + 0;
     }, 0)

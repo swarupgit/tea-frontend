@@ -193,7 +193,7 @@ export default function Order() {
             dataKey: col.field,
           }))
           .filter((i) => i.dataKey);
-          const doc = new jsPDF.default({ orientation: "p" }, 0, 0);
+          const doc = new jsPDF.default({ orientation: "l" }, 0, 0);
           doc.setFont('Times New Roman');
           doc.text("STATEMENT", 105, 10, {align:"center"});
           doc.text(`Party Name: ${selectedCustomer?.name}`, 105, 20, {align: "center"});

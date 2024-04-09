@@ -83,12 +83,12 @@ const NewPayment = (props) => {
   // );
   const [selectedPaymentType, setSelectedPaymentType] = useState(
     props.editingItem && props.editingItem._id
-      ? ptype.find((i) => i.value === props.editingItem.payType).value || false
+      ? ptype.find((i) => i.value === props.editingItem.payType)?.value || false
       : false
   );
   const [selectedPaymentMode, setSelectedPaymentMode] = useState(
     props.editingItem && props.editingItem._id
-      ? pmode.find((i) => i.value === props.editingItem.payBy).value || false
+      ? pmode.find((i) => i.value === props.editingItem.payBy)?.value || false
       : false
   );
   const [selectedDate, setSelectedDate] = useState(
@@ -151,7 +151,8 @@ const NewPayment = (props) => {
     payBy: selectedPaymentMode || '',
     payNote: enteredPaymentNote || '',
     creditAmount:
-    selectedPaymentType === "Credit"
+    // (selectedPaymentType === "Credit") || (selectedPaymentType === "Opening Balance")
+    (selectedPaymentType === "Credit")
         ? parseFloat(enteredPrice)
         : 0,
     debitAmount:
@@ -248,7 +249,7 @@ const NewPayment = (props) => {
             onChange={invoiceNoChangeHandler}
           />
         </div>
-        <div className={`${classes.control}`}>
+        {/* <div className={`${classes.control}`}>
           <label htmlFor="customer">Opening Balance</label>
           <input
             type="text"
@@ -256,7 +257,7 @@ const NewPayment = (props) => {
             value={enteredOpeningBal}
             onChange={openingBalChangeHandler}
           />
-        </div>
+        </div> */}
         <div className={`${classes.control}`}>
           <label htmlFor="customer">Name</label>
           <input

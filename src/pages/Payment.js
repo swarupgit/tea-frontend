@@ -410,6 +410,8 @@ export default function Payment() {
   };
   const hideNewPaymentHandler = () => {
     setAddPayment(false);
+    setEditingItem('');
+    document.body.classList.remove('hidden-overflow');
   };
 
   const updatePayment = async (updatingItem) => {
@@ -417,6 +419,7 @@ export default function Payment() {
     setAddPayment(false);
     document.body.classList.remove('hidden-overflow');
     dispatch(fetchPayment());
+    setEditingItem('');
   }
 
   const deleteItem = async (data, index) => {

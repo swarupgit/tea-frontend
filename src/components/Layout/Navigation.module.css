@@ -19,6 +19,10 @@
   color: white;
 }
 
+.active {
+  color: #f800f8 !important;
+}
+
 .top-10 {
   margin-top: 10px;
 }
