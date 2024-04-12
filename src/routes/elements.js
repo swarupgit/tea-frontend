@@ -21,6 +21,9 @@ export const Stocks = Loadable(lazy(() => import("../pages/Stock")));
 export const CustomerList = Loadable(
   lazy(() => import("../pages/CustomerList"))
 );
+export const MonthWise = Loadable(
+  lazy(() => import("../pages/MonthWise"))
+);
 export const NewCustomer = Loadable(
   lazy(() => import("../pages/NewCustomer"))
 );

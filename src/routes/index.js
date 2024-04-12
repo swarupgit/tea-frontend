@@ -14,6 +14,7 @@ import {
 import Authenticate from "../components/middleware/Authenticate";
 import CompactLayout from "../components/compact/CompactLayout";
 import BlankPageLayout from "../components/BlankPage/BlankPageLayout";
+import MonthWise from "../pages/MonthWise";
 
 // ----------------------------------------------------------------------
 
@@ -66,6 +67,13 @@ export default function Router() {
           element: <BlankPageLayout />,
           children: [
             { path: "/profile", element: <Profile /> },
+          ],
+        },        
+        {
+          path: "/month-wise",
+          element: <BlankPageLayout />,
+          children: [
+            { path: "/month-wise", element: <MonthWise /> },
           ],
         },
       ],

@@ -1,13 +1,41 @@
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
 import classes from "./BusinessStatistic.module.css";
 import { allOrders } from "../../store/order-slice";
 import { useSelector } from "react-redux";
 import { allCustomers } from "../../store/quote-slice";
+import Link from "next/link";
 
 const BusinessStatistic = () => {
   const orders = useSelector(allOrders);
   const customers = useSelector(allCustomers);
+  const monthList = {
+    0: "Jan",
+    1: "Feb",
+    2: "Mar",
+    3: "Apr",
+    4: "May",
+    5: "Jun",
+    6: "Jul",
+    7: "Aug",
+    8: "Sep",
+    9: "Oct",
+    10: "Nov",
+    11: "Dec",
+  };
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+  const [yearList, setYearList] = useState([new Date().getFullYear()]);
+  const [year, setYear] = useState(new Date().getFullYear());
+  useEffect(() => {
+    const list = [...yearList];
+    orders.forEach((order) => {
+      if(!yearList.includes(new Date(order.transactionDate).getFullYear())) {
+        list.push(new Date(order.transactionDate).getFullYear());
+      }
+    })
+    setYearList(list);
+
+  }, [])
   const totalNetLeaf = orders
     .reduce((carry, item) => {
       return item.netLeafKgs ? carry + parseFloat(item.netLeafKgs) : carry + 0;
@@ -29,64 +57,107 @@ const BusinessStatistic = () => {
     .toFixed(2);
   const monthNetLeaf = orders
     .reduce((carry, item) => {
-      const tmonth = `${new Date(item.transactionDate).getMonth()}${new Date(item.transactionDate).getFullYear()}`
-      const month = `${new Date().getMonth()}${new Date().getFullYear()}`
-      return (tmonth ===
-        month) && item.netLeafKgs
+      const tmonth = `${new Date(item.transactionDate).getMonth()}${new Date(
+        item.transactionDate
+      ).getFullYear()}`;
+      const month = `${new Date().getMonth()}${new Date().getFullYear()}`;
+      return tmonth === month && item.netLeafKgs
         ? carry + parseFloat(item.netLeafKgs)
         : carry + 0;
     }, 0)
     .toFixed(2);
   const monthDebitAmount = orders
     .reduce((carry, item) => {
-      const tmonth = `${new Date(item.transactionDate).getMonth()}${new Date(item.transactionDate).getFullYear()}`
-      const month = `${new Date().getMonth()}${new Date().getFullYear()}`
-      return (tmonth ===
-        month) && (item.debitAmount > 0)
+      const tmonth = `${new Date(item.transactionDate).getMonth()}${new Date(
+        item.transactionDate
+      ).getFullYear()}`;
+      const month = `${new Date().getMonth()}${new Date().getFullYear()}`;
+      return tmonth === month && item.debitAmount > 0
         ? carry + parseFloat(item.debitAmount)
         : carry + 0;
     }, 0)
     .toFixed(2);
   const monthCreditAmount = orders
     .reduce((carry, item) => {
-      const tmonth = `${new Date(item.transactionDate).getMonth()}${new Date(item.transactionDate).getFullYear()}`
-      const month = `${new Date().getMonth()}${new Date().getFullYear()}`
-      return (tmonth ===
-        month) && (item.creditAmount > 0)
+      const tmonth = `${new Date(item.transactionDate).getMonth()}${new Date(
+        item.transactionDate
+      ).getFullYear()}`;
+      const month = `${new Date().getMonth()}${new Date().getFullYear()}`;
+      return tmonth === month && item.creditAmount > 0
         ? carry + parseFloat(item.creditAmount)
         : carry + 0;
     }, 0)
     .toFixed(2);
   const todayNetLeaf = orders
     .reduce((carry, item) => {
-      const tday = `${new Date(item.transactionDate).getDate()}${new Date(item.transactionDate).getMonth()}${new Date(item.transactionDate).getFullYear()}`
-      const day = `${new Date().getDate()}${new Date().getMonth()}${new Date().getFullYear()}`
-      return ((tday ===
-        day) && item.netLeafKgs)
+      const tday = `${new Date(item.transactionDate).getDate()}${new Date(
+        item.transactionDate
+      ).getMonth()}${new Date(item.transactionDate).getFullYear()}`;
+      const day = `${new Date().getDate()}${new Date().getMonth()}${new Date().getFullYear()}`;
+      return tday === day && item.netLeafKgs
         ? carry + parseFloat(item.netLeafKgs)
         : carry + 0;
     }, 0)
     .toFixed(2);
   const todayDebitAmount = orders
     .reduce((carry, item) => {
-      const tday = `${new Date(item.transactionDate).getDate()}${new Date(item.transactionDate).getMonth()}${new Date(item.transactionDate).getFullYear()}`
-      const day = `${new Date().getDate()}${new Date().getMonth()}${new Date().getFullYear()}`
-      return (tday ===
-        day) && (item.debitAmount > 0)
+      const tday = `${new Date(item.transactionDate).getDate()}${new Date(
+        item.transactionDate
+      ).getMonth()}${new Date(item.transactionDate).getFullYear()}`;
+      const day = `${new Date().getDate()}${new Date().getMonth()}${new Date().getFullYear()}`;
+      return tday === day && item.debitAmount > 0
         ? carry + parseFloat(item.debitAmount)
         : carry + 0;
     }, 0)
     .toFixed(2);
   const todayCreditAmount = orders
     .reduce((carry, item) => {
-      const tday = `${new Date(item.transactionDate).getDate()}${new Date(item.transactionDate).getMonth()}${new Date(item.transactionDate).getFullYear()}`
-      const day = `${new Date().getDate()}${new Date().getMonth()}${new Date().getFullYear()}`
-      return (tday ===
-        day) && (item.creditAmount > 0)
+      const tday = `${new Date(item.transactionDate).getDate()}${new Date(
+        item.transactionDate
+      ).getMonth()}${new Date(item.transactionDate).getFullYear()}`;
+      const day = `${new Date().getDate()}${new Date().getMonth()}${new Date().getFullYear()}`;
+      return tday === day && item.creditAmount > 0
         ? carry + parseFloat(item.creditAmount)
         : carry + 0;
     }, 0)
     .toFixed(2);
+  const monthYearNetLeaf = orders
+    .reduce((carry, item) => {
+      const tmonth = `${new Date(item.transactionDate).getMonth()}${new Date(
+        item.transactionDate
+      ).getFullYear()}`;
+      const month = `${selectedMonth}${year}`;
+      return tmonth === month && item.netLeafKgs
+        ? carry + parseFloat(item.netLeafKgs)
+        : carry + 0;
+    }, 0)
+    .toFixed(2);
+  const monthYearDebitAmount = orders
+    .reduce((carry, item) => {
+      const tmonth = `${new Date(item.transactionDate).getMonth()}${new Date(
+        item.transactionDate
+      ).getFullYear()}`;
+      const month = `${selectedMonth}${year}`;
+      return tmonth === month && item.debitAmount > 0
+        ? carry + parseFloat(item.debitAmount)
+        : carry + 0;
+    }, 0)
+    .toFixed(2);
+  const monthYearCreditAmount = orders
+    .reduce((carry, item) => {
+      const tmonth = `${new Date(item.transactionDate).getMonth()}${new Date(
+        item.transactionDate
+      ).getFullYear()}`;
+      const month = `${selectedMonth}${year}`;
+      return tmonth === month && item.creditAmount > 0
+        ? carry + parseFloat(item.creditAmount)
+        : carry + 0;
+    }, 0)
+    .toFixed(2);
+  const handleClick = () => {
+    localStorage.setItem('month', selectedMonth);
+    localStorage.setItem('year', year);
+  }
   let top1 = {
     _id: "",
     name: "",
@@ -152,79 +223,43 @@ const BusinessStatistic = () => {
         }
       });
     }
-    console.log(maxCustomer, "customer after3");
+    console.log(maxCustomer, "customer after3", new Date().getMonth());
   }
   return (
     <Fragment>
       <div className={`row ${classes.cardRow}`}>
-        <div className="col-xl-3 col-lg-6 mb-2">
+        <div className="col-xl-4 col-lg-6 mb-2">
           <div
             className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`}
             style={{ backgroundColor: "#FF0000" }}
           >
             <div className="card-body">
               <div className="row">
-                <div className="col">
+                <div className="col" style={{ textAlign: "center" }}>
                   <h5 className="card-title text-uppercase mb-0">
                     Total Green Leaves
                   </h5>
                   <span className="h2 font-weight-bold mb-0">
                     {totalNetLeaf} KG
                   </span>
-                </div>
-                <div className="col-auto">
-                  <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
-                    {/* <i className="pi pi-chart-bar" style={{ fontSize: '2.5rem' }}></i> */}
-                  </div>
-                </div>
-              </div>
-              <p
-                className={`mt-3 mb-0 text-muted text-sm ${classes.cardSpace}`}
-              ></p>
-            </div>
-          </div>
-        </div>
-        <div className="col-xl-3 col-lg-6 mb-2">
-          <div
-            className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`}
-            style={{ backgroundColor: "#0000FF" }}
-          >
-            <div className="card-body">
-              <div className="row">
-                <div className="col">
                   <h5 className="card-title text-uppercase mb-0">
                     Total Credit Amount
                   </h5>
                   <span className="h2 font-weight-bold mb-0">
                     ₹ {totalCreditAmount}
                   </span>
-                </div>
-                <div className="col-auto">
-                  <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
-                    {/* <i className="pi pi-chart-bar" style={{ fontSize: '2.5rem' }}></i> */}
-                  </div>
-                </div>
-              </div>
-              <p
-                className={`mt-3 mb-0 text-muted text-sm ${classes.cardSpace}`}
-              ></p>
-            </div>
-          </div>
-        </div>
-        <div className="col-xl-3 col-lg-6 mb-2">
-          <div
-            className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`}
-            style={{ backgroundColor: "#800000" }}
-          >
-            <div className="card-body">
-              <div className="row">
-                <div className="col">
                   <h5 className="card-title text-uppercase mb-0">
                     Total Debit Amount
                   </h5>
                   <span className="h2 font-weight-bold mb-0">
                     ₹ {totalDebitAmount}
                   </span>
+                  <h5 className="card-title text-uppercase mb-0">
+                    Total Outstanding Amount
+                  </h5>
+                  <span className="h2 font-weight-bold mb-0">
+                    ₹ {(totalCreditAmount - totalDebitAmount).toFixed(2)}
+                  </span>
                 </div>
                 <div className="col-auto">
                   <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
@@ -238,46 +273,37 @@ const BusinessStatistic = () => {
             </div>
           </div>
         </div>
-        <div className="col-xl-3 col-lg-6 mb-2">
-          <div
-            className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`}
-            style={{ backgroundColor: "#00008B" }}
-          >
-            <div className="card-body">
-              <div className="row">
-                <div className="col">
-                  <h5 className="card-title text-uppercase mb-0">
-                    This Month's Credit Amount
-                  </h5>
-                  <span className="h2 font-weight-bold mb-0">
-                    ₹ {monthCreditAmount}
-                  </span>
-                </div>
-                <div className="col-auto">
-                  <div className="icon icon-shape bg-warning text-white rounded-circle shadow">
-                    <i className="fas fa-chart-pie"></i>
-                  </div>
-                </div>
-              </div>
-              <p
-                className={`mt-3 mb-0 text-muted text-sm ${classes.cardSpace}`}
-              ></p>
-            </div>
-          </div>
-        </div>
-        <div className="col-xl-3 col-lg-6 mb-2">
+        <div className="col-xl-4 col-lg-6 mb-2">
           <div
             className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`}
             style={{ backgroundColor: "#800080" }}
           >
             <div className="card-body">
               <div className="row">
-                <div className="col">
+                <div className="col" style={{ textAlign: "center" }}>
                   <h5 className="card-title text-uppercase mb-0">
-                    This Month's Debit Amount
+                    This Month Green Leaves
+                  </h5>
+                  <span className="h2 font-weight-bold mb-0">
+                    {monthNetLeaf} KG
+                  </span>
+                  <h5 className="card-title text-uppercase mb-0">
+                    This Month Credit Amount
+                  </h5>
+                  <span className="h2 font-weight-bold mb-0">
+                    ₹ {monthCreditAmount}
+                  </span>
+                  <h5 className="card-title text-uppercase mb-0">
+                    This Month Debit Amount
                   </h5>
                   <span className="h2 font-weight-bold mb-0">
                     ₹ {monthDebitAmount}
+                  </span>
+                  <h5 className="card-title text-uppercase mb-0">
+                    This Month Outstanding Amount
+                  </h5>
+                  <span className="h2 font-weight-bold mb-0">
+                    ₹ {(monthCreditAmount - monthDebitAmount).toFixed(2)}
                   </span>
                 </div>
                 <div className="col-auto">
@@ -292,51 +318,42 @@ const BusinessStatistic = () => {
             </div>
           </div>
         </div>
-        <div className="col-xl-3 col-lg-6 mb-2">
+        <div className="col-xl-4 col-lg-6 mb-2">
           <div
             className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`}
-            style={{ backgroundColor: "#008000" }}
+            style={{ backgroundColor: "#0000FF" }}
           >
             <div className="card-body">
               <div className="row">
-                <div className="col">
+                <div className="col" style={{ textAlign: "center" }}>
                   <h5 className="card-title text-uppercase mb-0">
-                    Today's Credit Amount
+                    Today Green Leaves
+                  </h5>
+                  <span className="h2 font-weight-bold mb-0">
+                    {todayNetLeaf} KG
+                  </span>
+                  <h5 className="card-title text-uppercase mb-0">
+                    Today Credit Amount
                   </h5>
                   <span className="h2 font-weight-bold mb-0">
                     ₹ {todayCreditAmount}
                   </span>
-                </div>
-                <div className="col-auto">
-                  <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                    <i className="fas fa-users"></i>
-                  </div>
-                </div>
-              </div>
-              <p
-                className={`mt-3 mb-0 text-muted text-sm ${classes.cardSpace}`}
-              ></p>
-            </div>
-          </div>
-        </div>
-        <div className="col-xl-3 col-lg-6 mb-2">
-          <div
-            className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`}
-            style={{ backgroundColor: "#FFA500" }}
-          >
-            <div className="card-body">
-              <div className="row">
-                <div className="col">
                   <h5 className="card-title text-uppercase mb-0">
-                    Today's Debit Amount
+                    Today Debit Amount
                   </h5>
                   <span className="h2 font-weight-bold mb-0">
                     ₹ {todayDebitAmount}
                   </span>
+                  <h5 className="card-title text-uppercase mb-0">
+                    Today Outstanding Amount
+                  </h5>
+                  <span className="h2 font-weight-bold mb-0">
+                    ₹ {(todayCreditAmount - todayDebitAmount).toFixed(2)}
+                  </span>
                 </div>
                 <div className="col-auto">
-                  <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                    <i className="fas fa-users"></i>
+                  <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
+                    {/* <i className="pi pi-chart-bar" style={{ fontSize: '2.5rem' }}></i> */}
                   </div>
                 </div>
               </div>
@@ -346,14 +363,14 @@ const BusinessStatistic = () => {
             </div>
           </div>
         </div>
-        <div className="col-xl-3 col-lg-6 mb-2">
+        <div className="col-xl-4 col-lg-6 mb-2">
           <div
             className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`}
             style={{ backgroundColor: "#b3004d" }}
           >
             <div className="card-body">
               <div className="row">
-                <div className="col">
+                <div className="col" style={{ textAlign: "center" }}>
                   <h5 className="card-title text-uppercase mb-0">
                     Total Customer
                   </h5>
@@ -373,68 +390,14 @@ const BusinessStatistic = () => {
             </div>
           </div>
         </div>
-        <div className="col-xl-6 col-lg-6 mb-2">
+        <div className="col-xl-4 col-lg-6 mb-2">
           <div
             className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`}
-            style={{ backgroundColor: "#00FFFF" }}
+            style={{ backgroundColor: "#00008B" }}
           >
             <div className="card-body">
               <div className="row">
-                <div className="col">
-                  <h5 className="card-title text-uppercase mb-0">
-                    This Month's Neat Leaf
-                  </h5>
-                  <span className="h2 font-weight-bold mb-0">
-                    {monthNetLeaf} KG
-                  </span>
-                </div>
-                <div className="col-auto">
-                  <div className="icon icon-shape bg-warning text-white rounded-circle shadow">
-                    <i className="fas fa-chart-pie"></i>
-                  </div>
-                </div>
-              </div>
-              <p
-                className={`mt-3 mb-0 text-muted text-sm ${classes.cardSpace}`}
-              ></p>
-            </div>
-          </div>
-        </div>
-        <div className="col-xl-6 col-lg-6 mb-2">
-          <div
-            className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`}
-            style={{ backgroundColor: "#000000" }}
-          >
-            <div className="card-body">
-              <div className="row">
-                <div className="col">
-                  <h5 className="card-title text-uppercase mb-0">
-                    Today's Neat Leaf
-                  </h5>
-                  <span className="h2 font-weight-bold mb-0">
-                    {todayNetLeaf} KG
-                  </span>
-                </div>
-                <div className="col-auto">
-                  <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                    <i className="fas fa-users"></i>
-                  </div>
-                </div>
-              </div>
-              <p
-                className={`mt-3 mb-0 text-muted text-sm ${classes.cardSpace}`}
-              ></p>
-            </div>
-          </div>
-        </div>
-        <div className="offset-xl-3 col-xl-6 col-lg-6 mb-2">
-          <div
-            className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`}
-            style={{ backgroundColor: "#FF0054" }}
-          >
-            <div className="card-body">
-              <div className="row">
-                <div className="col">
+                <div className="col" style={{ textAlign: "center" }}>
                   <h5 className="card-title text-uppercase mb-0">
                     Top Customers{" "}
                     <span className={classes.smallText}>(Upto 3)</span>
@@ -467,6 +430,69 @@ const BusinessStatistic = () => {
                 <div className="col-auto">
                   <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
                     <i className="fas fa-users"></i>
+                  </div>
+                </div>
+              </div>
+              <p
+                className={`mt-3 mb-0 text-muted text-sm ${classes.cardSpace}`}
+              ></p>
+            </div>
+          </div>
+        </div>
+        <div className="col-xl-4 col-lg-6 mb-2">
+          <div
+            className={`card card-stats mb-4 mb-xl-0 ${classes.stats}`}
+            style={{ backgroundColor: "#D32D41" }}
+          >
+            <div className="card-body">
+              <div className="row">
+                <div className="col">
+                  <select onChange={(e) => setSelectedMonth(e.target.value)} value={selectedMonth}>
+                    {Object.values(monthList).map((i, k) => (
+                      <option value={k} key={k}>{i}</option>
+                    ))}
+                  </select>
+                  <select onChange={(e) => setYear(e.target.value)} value={year}>
+                    {yearList.map((i, k) => (
+                      <option value={i} key={k}>{i}</option>
+                    ))}
+                  </select>
+                  <a href={`/month-wise?month=${selectedMonth}&year=${year}`} onClick={handleClick} style={{ float: "right", color: "#fff"}}>Take Print</a>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col" style={{ textAlign: "center" }}>
+                  <h5 className="card-title text-uppercase mb-0">
+                    {`${monthList[selectedMonth]}/${year}`}
+                  </h5>
+                  <h5 className="card-title text-uppercase mb-0">
+                    Green Leaves
+                  </h5>
+                  <span className="h2 font-weight-bold mb-0">
+                    {monthYearNetLeaf} KG
+                  </span>
+                  <h5 className="card-title text-uppercase mb-0">
+                    Credit Amount
+                  </h5>
+                  <span className="h2 font-weight-bold mb-0">
+                    ₹ {monthYearCreditAmount}
+                  </span>
+                  <h5 className="card-title text-uppercase mb-0">
+                    Debit Amount
+                  </h5>
+                  <span className="h2 font-weight-bold mb-0">
+                    ₹ {monthYearDebitAmount}
+                  </span>
+                  <h5 className="card-title text-uppercase mb-0">
+                    Outstanding Amount
+                  </h5>
+                  <span className="h2 font-weight-bold mb-0">
+                    ₹ {(monthYearCreditAmount - monthYearDebitAmount).toFixed(2)}
+                  </span>
+                </div>
+                <div className="col-auto">
+                  <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
+                    {/* <i className="pi pi-chart-bar" style={{ fontSize: '2.5rem' }}></i> */}
                   </div>
                 </div>
               </div>
