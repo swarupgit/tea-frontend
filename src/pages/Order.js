@@ -201,7 +201,8 @@ export default function Order() {
             "DD-MM-YYYY"
           )}`, 105, 30, {align:"center"});
           let position = 0;
-          const outstanding = parseFloat(totalCreditAmount) > parseFloat(totalDebitAmount) ? (totalCreditAmount - totalDebitAmount).toFixed(2) : 0;
+          // const outstanding = parseFloat(totalCreditAmount) > parseFloat(totalDebitAmount) ? (totalCreditAmount - totalDebitAmount).toFixed(2) : 0;
+          const outstanding = (totalCreditAmount - totalDebitAmount).toFixed(2);
           // const outstanding = parseFloat(selectedCustomer?.outStandingAmount).toFixed(2); 
           // console.log(customers, selectedCustomer?.outStandingAmount, parseFloat(selectedCustomer?.outStandingAmount), parseFloat(currentOutstanding))
           const otherCol = [
@@ -339,7 +340,8 @@ export default function Order() {
           "DD-MM-YYYY"
         )}`, 105, 30, {align:"center"});
         let position = 0;
-        const outstanding = parseFloat(totalCreditAmount) > parseFloat(totalDebitAmount) ? (totalCreditAmount - totalDebitAmount).toFixed(2) : 0;
+        // const outstanding = parseFloat(totalCreditAmount) > parseFloat(totalDebitAmount) ? (totalCreditAmount - totalDebitAmount).toFixed(2) : 0;
+        const outstanding = (totalCreditAmount - totalDebitAmount).toFixed(2);
         // const outstanding = parseFloat(selectedCustomer?.outStandingAmount).toFixed(2); 
         const pdfColumn = [...exportColumns];
         const final = [
