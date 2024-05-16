@@ -132,6 +132,10 @@ const BillPreview = (props) => {
     return item.creditAmount > 0 ? parseFloat(item.creditAmount) + carry : carry + 0;
   }, 0).toFixed(2);
 
+  const totalLeaf = props.billingData.reduce((carry, item) => {
+    return item.netLeafKgs > 0 ? parseFloat(item.netLeafKgs) + carry : carry + 0;
+  }, 0).toFixed(2);
+
   const sellerChangeHandler = (e) => {
     setSeller(e.target.value);
   };
@@ -214,6 +218,7 @@ const BillPreview = (props) => {
             </div>
           </div>
           <div className={`${classes["bar-after"]} bar-after row`}>
+          {props.selectedDate && (<div className="text-center"> {props.selectedDate}</div>)}
             <table className={`${classes["custom-table"]} custom-table`}>
               <thead>
                 <tr className={`${classes["table-row"]} table-row`}>
@@ -253,9 +258,9 @@ const BillPreview = (props) => {
                   })}
                 <tr className={`${classes["table-row"]} table-row`}>
                   <th></th>
+                  <th>Total Leaf</th>
                   <th></th>
-                  <th></th>
-                  <th></th>
+                  <th>{totalLeaf}KG</th>
                   <th>Total Amount</th>
                   <th>{totalAmount}</th>
                   <th></th>

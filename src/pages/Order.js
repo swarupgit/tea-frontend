@@ -181,7 +181,7 @@ export default function Order() {
   const creatingBill = () => {
     document.body.classList.add("hidden-overflow");
     setPreviewBill(true);
-    resetSearch();
+    // resetSearch();
   };
 
   const pdfStatement = () => {
@@ -537,6 +537,9 @@ export default function Order() {
             customer={
               selectedCustomer ?? "Customer not Selected when bill created"
             }
+            selectedDate={`${fromDate ? `Period From ${moment(fromDate).format("DD/MM/YYYY")} To ${moment(
+              toDate
+            ).format("DD/MM/YYYY")}` : ''}`}
             title={title}
           />
         )}
